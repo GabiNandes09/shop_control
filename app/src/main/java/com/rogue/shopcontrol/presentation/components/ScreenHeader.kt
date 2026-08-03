@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RecordsHeader(
+fun ScreenHeader(
+    title: String = "Registros de Compras",
     modifier: Modifier = Modifier
 ) {
 
@@ -21,7 +22,7 @@ fun RecordsHeader(
     ) {
 
         Text(
-            text = "Registros de Compras",
+            text = title,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.padding(16.dp)

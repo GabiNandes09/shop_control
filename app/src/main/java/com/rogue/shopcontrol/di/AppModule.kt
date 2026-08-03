@@ -4,6 +4,8 @@ import com.rogue.shopcontrol.data.repository.CompraRepository
 import com.rogue.shopcontrol.domain.usecase.DeleteCompraUseCase
 import com.rogue.shopcontrol.domain.usecase.GetCompraByIdUseCase
 import com.rogue.shopcontrol.domain.usecase.GetComprasUseCase
+import com.rogue.shopcontrol.domain.usecase.GetMonthlySpendingHistoryUseCase
+import com.rogue.shopcontrol.domain.usecase.GetMonthlySpendingUseCase
 import com.rogue.shopcontrol.domain.usecase.SavePurchaseUseCase
 import org.koin.dsl.module
 
@@ -32,6 +34,16 @@ val appModule = module {
     }
     factory {
         DeleteCompraUseCase(
+            get()
+        )
+    }
+    factory {
+        GetMonthlySpendingUseCase(
+            get()
+        )
+    }
+    factory {
+        GetMonthlySpendingHistoryUseCase(
             get()
         )
     }

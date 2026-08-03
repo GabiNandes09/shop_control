@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.presentation.components.ConfirmDialog
 import com.rogue.shopcontrol.presentation.components.ProductListItem
 import com.rogue.shopcontrol.presentation.components.PurchaseSummaryCard
-import com.rogue.shopcontrol.presentation.components.RecordsHeader
+import com.rogue.shopcontrol.presentation.components.ScreenHeader
 import com.rogue.shopcontrol.presentation.viewmodel.PurchaseDetailViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -56,7 +56,7 @@ fun PurchaseDetailScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        RecordsHeader()
+        ScreenHeader()
 
         val compra = state.compra
 

@@ -10,6 +10,8 @@ sealed class Routes(
 
     data object Records : Routes("records")
 
+    data object SpendingComparison : Routes("spending_comparison")
+
     data object PurchaseDetail : Routes("purchase_detail/{compraId}") {
 
         fun createRoute(compraId: Long) =

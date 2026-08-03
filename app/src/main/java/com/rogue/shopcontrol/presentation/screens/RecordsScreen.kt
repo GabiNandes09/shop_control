@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.presentation.components.PurchaseListItem
-import com.rogue.shopcontrol.presentation.components.RecordsHeader
+import com.rogue.shopcontrol.presentation.components.ScreenHeader
 import com.rogue.shopcontrol.presentation.viewmodel.RecordsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,7 +30,7 @@ fun RecordsScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        RecordsHeader()
+        ScreenHeader()
 
         when {
 

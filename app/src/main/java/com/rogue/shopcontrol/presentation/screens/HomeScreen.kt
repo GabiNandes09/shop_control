@@ -12,15 +12,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.presentation.components.StatCard
+import com.rogue.shopcontrol.presentation.viewmodel.HomeViewModel
+import com.rogue.shopcontrol.utils.formatCurrency
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun HomeScreen(
     onScannerClick: () -> Unit,
-    onRecordsClick: () -> Unit
+    onRecordsClick: () -> Unit,
+    onSpendingCardClick: () -> Unit,
+    viewModel: HomeViewModel = koinViewModel()
 ) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         floatingActionButton = {
@@ -55,6 +65,15 @@ fun HomeScreen(
                 Text("Registros")
 
             }
+
+            StatCard(
+                title = "Valor gasto",
+                value = formatCurrency(state.gastoMensal),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onClick = onSpendingCardClick
+            )
 
         }
 

@@ -10,6 +10,7 @@ import com.rogue.shopcontrol.presentation.screens.HomeScreen
 import com.rogue.shopcontrol.presentation.screens.PurchaseDetailScreen
 import com.rogue.shopcontrol.presentation.screens.RecordsScreen
 import com.rogue.shopcontrol.presentation.screens.ScannerScreen
+import com.rogue.shopcontrol.presentation.screens.SpendingComparisonScreen
 
 
 @Composable
@@ -36,6 +37,12 @@ fun AppNavigation() {
                 onRecordsClick = {
                     navController.navigate(
                         Routes.Records.route
+                    )
+                },
+
+                onSpendingCardClick = {
+                    navController.navigate(
+                        Routes.SpendingComparison.route
                     )
                 }
             )
@@ -71,6 +78,13 @@ fun AppNavigation() {
                     )
                 }
             )
+
+        }
+
+
+        composable(Routes.SpendingComparison.route) {
+
+            SpendingComparisonScreen()
 
         }
 
