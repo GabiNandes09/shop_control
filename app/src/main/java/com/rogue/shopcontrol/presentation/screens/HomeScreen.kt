@@ -1,13 +1,19 @@
 package com.rogue.shopcontrol.presentation.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -15,34 +21,40 @@ fun HomeScreen(
     onScannerClick: () -> Unit,
     onRecordsClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
 
-        verticalArrangement = Arrangement.Center,
+    Scaffold(
+        floatingActionButton = {
 
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+            FloatingActionButton(
+                onClick = onScannerClick
+            ) {
 
+                Icon(
+                    imageVector = Icons.Filled.CameraAlt,
+                    contentDescription = "Scanner"
+                )
 
-        Button(
-            onClick = onScannerClick
-        ) {
-
-            Text(
-                text = "Scannear"
-            )
+            }
 
         }
+    ) { innerPadding ->
 
-
-        Button(
-            onClick = onRecordsClick
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
 
-            Text(
-                text = "Registros"
-            )
+            Button(
+                onClick = onRecordsClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+
+                Text("Registros")
+
+            }
 
         }
 
