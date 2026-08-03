@@ -9,4 +9,11 @@ sealed class Routes(
     data object Scanner : Routes("scanner")
 
     data object Records : Routes("records")
+
+    data object PurchaseDetail : Routes("purchase_detail/{compraId}") {
+
+        fun createRoute(compraId: Long) =
+            "purchase_detail/$compraId"
+
+    }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.presentation.components.SuccessDialog
 import com.rogue.shopcontrol.presentation.viewmodel.ScannerViewModel
 import com.rogue.shopcontrol.utils.startScanner
 import org.koin.androidx.compose.koinViewModel
@@ -22,7 +23,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ScannerScreen(
     viewModel: ScannerViewModel = koinViewModel(),
-    onQrCodeRead: (String) -> Unit
+    onPurchaseSaved: (Long) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -31,18 +32,6 @@ fun ScannerScreen(
 
     var hasPermission by remember {
         mutableStateOf(false)
-    }
-
-    LaunchedEffect(
-        state.url
-    ) {
-
-        state.url?.let {
-
-            onQrCodeRead(it)
-            viewModel.resetScanner()
-        }
-
     }
 
 
@@ -75,7 +64,22 @@ fun ScannerScreen(
 
         CameraPreview(
             lifecycleOwner = lifecycleOwner,
-            onQrCodeRead = {viewModel.onQrCodeRead(it)}
+            onQrCodeRead = { viewModel.onQrCodeRead(it) }
+        )
+
+    }
+
+
+    state.savedCompraId?.let { compraId ->
+
+        SuccessDialog(
+            title = "Compra salva",
+            message = "A nota fiscal foi lida e salva com sucesso.",
+            confirmLabel = "Ver detalhes",
+            onConfirm = {
+                viewModel.resetScanner()
+                onPurchaseSaved(compraId)
+            }
         )
 
     }

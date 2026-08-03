@@ -10,10 +10,8 @@ class SavePurchaseUseCase(
 
     suspend operator fun invoke(
         nfce: NfceData
-    ) {
+    ): Long =
 
         repository.save(nfce)
-
-    }
 
 }

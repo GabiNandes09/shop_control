@@ -3,11 +3,13 @@ package com.rogue.shopcontrol.data.repository
 import com.rogue.shopcontrol.data.local.dao.CompraDao
 import com.rogue.shopcontrol.data.local.dao.EstabelecimentoDao
 import com.rogue.shopcontrol.data.local.dao.ProdutoDao
+import com.rogue.shopcontrol.data.local.entity.CompraCompleta
 import com.rogue.shopcontrol.data.local.entity.CompraEntity
 import com.rogue.shopcontrol.data.local.entity.EstabelecimentoEntity
 import com.rogue.shopcontrol.data.local.entity.ItemCompraEntity
 import com.rogue.shopcontrol.data.local.entity.ProdutoEntity
 import com.rogue.shopcontrol.domain.model.NfceData
+import kotlinx.coroutines.flow.Flow
 
 class CompraRepository(
     private val estabelecimentoDao: EstabelecimentoDao,
@@ -18,7 +20,18 @@ class CompraRepository(
 
     suspend fun save(
         data: NfceData
-    ) {
+    ): Long {
+
+
+        val compraExistenteId =
+            compraDao.findCompraId(
+                cnpjEstabelecimento = data.estabelecimento.cnpj,
+                dataCompra = data.dataEmissao
+            )
+
+        if (compraExistenteId != null) {
+            return compraExistenteId
+        }
 
 
         val estabelecimentoId =
@@ -76,6 +89,24 @@ class CompraRepository(
 
         compraDao.insertItens(itens)
 
+        return compraId
+
     }
+
+
+    fun getCompras(): Flow<List<CompraCompleta>> =
+        compraDao.getCompras()
+
+
+    fun getCompraById(
+        compraId: Long
+    ): Flow<CompraCompleta?> =
+        compraDao.getCompraById(compraId)
+
+
+    suspend fun deleteCompra(
+        compraId: Long
+    ) =
+        compraDao.deleteCompraCompleta(compraId)
 
 }

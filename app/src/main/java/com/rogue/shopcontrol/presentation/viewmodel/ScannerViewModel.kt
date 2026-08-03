@@ -30,6 +30,15 @@ class ScannerViewModel(
 
     fun onQrCodeRead(url: String) {
 
+        if (!_state.value.isScanning) {
+            return
+        }
+
+        _state.value =
+            _state.value.copy(
+                isScanning = false
+            )
+
         viewModelScope.launch {
 
             try {
@@ -46,6 +55,11 @@ class ScannerViewModel(
                         "HTML vazio"
                     )
 
+                    _state.value = ScannerState(
+                        isScanning = false,
+                        error = "Não foi possível ler a nota fiscal"
+                    )
+
                     return@launch
                 }
 
@@ -53,14 +67,20 @@ class ScannerViewModel(
                 val nfce =
                     parser.parse(html)
 
-                savePurchase(
-                    nfce
-                )
+                val compraId =
+                    savePurchase(
+                        nfce
+                    )
 
 
                 Log.d(
                     "NFC_E",
                     "Compra salva"
+                )
+
+                _state.value = ScannerState(
+                    isScanning = false,
+                    savedCompraId = compraId
                 )
 
 
@@ -70,6 +90,11 @@ class ScannerViewModel(
                     "NFC_E",
                     "Erro ao processar NFC-e",
                     e
+                )
+
+                _state.value = ScannerState(
+                    isScanning = false,
+                    error = "Erro ao processar a nota fiscal"
                 )
 
             }
@@ -86,18 +111,4 @@ class ScannerViewModel(
 
     }
 
-
-    fun onError(
-        message: String
-    ) {
-
-        _state.value =
-            ScannerState(
-                isScanning = false,
-                error = message
-            )
-
-    }
-
 }
-

@@ -37,9 +37,31 @@ class NfceHtmlParser {
                 extractValorTotal(document),
 
             produtos =
-                extractProdutos(document)
+                mergeProdutosDuplicados(
+                    extractProdutos(document)
+                )
 
         )
+
+    }
+
+
+    private fun mergeProdutosDuplicados(
+        produtos: List<NfceProduct>
+    ): List<NfceProduct> {
+
+        return produtos
+            .groupBy {
+                it.nome to it.valorUnitario
+            }
+            .map { (_, grupo) ->
+
+                grupo.first().copy(
+                    quantidade = grupo.sumOf { it.quantidade },
+                    valorTotal = grupo.sumOf { it.valorTotal }
+                )
+
+            }
 
     }
 
