@@ -2,24 +2,23 @@ package com.rogue.shopcontrol.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rogue.shopcontrol.domain.usecase.GetMonthlySpendingUseCase
-import com.rogue.shopcontrol.domain.usecase.GetProdutosGastoUseCase
-import com.rogue.shopcontrol.presentation.viewmodel.states.HomeState
+import com.rogue.shopcontrol.domain.usecase.GetHistoricoProdutoUseCase
+import com.rogue.shopcontrol.domain.usecase.GetProdutoGastoByIdUseCase
+import com.rogue.shopcontrol.presentation.viewmodel.states.ProductDetailState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-private const val TOP_PRODUTOS_LIMITE = 5
-
-class HomeViewModel(
-    getMonthlySpending: GetMonthlySpendingUseCase,
-    getProdutosGasto: GetProdutosGastoUseCase
+class ProductDetailViewModel(
+    produtoId: Long,
+    getProdutoGastoById: GetProdutoGastoByIdUseCase,
+    getHistoricoProduto: GetHistoricoProdutoUseCase
 ) : ViewModel() {
 
 
     private val _state =
         MutableStateFlow(
-            HomeState()
+            ProductDetailState()
         )
 
     val state =
@@ -30,11 +29,12 @@ class HomeViewModel(
 
         viewModelScope.launch {
 
-            getMonthlySpending().collect { gastoMensal ->
+            getProdutoGastoById(produtoId).collect { produto ->
 
                 _state.value =
                     _state.value.copy(
-                        gastoMensal = gastoMensal
+                        produto = produto,
+                        isLoading = false
                     )
 
             }
@@ -43,11 +43,11 @@ class HomeViewModel(
 
         viewModelScope.launch {
 
-            getProdutosGasto().collect { produtos ->
+            getHistoricoProduto(produtoId).collect { historico ->
 
                 _state.value =
                     _state.value.copy(
-                        topProdutos = produtos.take(TOP_PRODUTOS_LIMITE)
+                        historico = historico
                     )
 
             }

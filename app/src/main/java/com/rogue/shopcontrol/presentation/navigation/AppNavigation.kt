@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.rogue.shopcontrol.presentation.screens.HomeScreen
+import com.rogue.shopcontrol.presentation.screens.ProductDetailScreen
+import com.rogue.shopcontrol.presentation.screens.ProductListScreen
 import com.rogue.shopcontrol.presentation.screens.PurchaseDetailScreen
 import com.rogue.shopcontrol.presentation.screens.RecordsScreen
 import com.rogue.shopcontrol.presentation.screens.ScannerScreen
@@ -43,6 +45,12 @@ fun AppNavigation() {
                 onSpendingCardClick = {
                     navController.navigate(
                         Routes.SpendingComparison.route
+                    )
+                },
+
+                onProductsClick = {
+                    navController.navigate(
+                        Routes.Products.route
                     )
                 }
             )
@@ -85,6 +93,40 @@ fun AppNavigation() {
         composable(Routes.SpendingComparison.route) {
 
             SpendingComparisonScreen()
+
+        }
+
+
+        composable(Routes.Products.route) {
+
+            ProductListScreen(
+                onProductClick = { produtoId ->
+                    navController.navigate(
+                        Routes.ProductDetail.createRoute(produtoId)
+                    )
+                }
+            )
+
+        }
+
+
+        composable(
+            route = Routes.ProductDetail.route,
+            arguments = listOf(
+                navArgument("produtoId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+
+            val produtoId =
+                backStackEntry.arguments
+                    ?.getLong("produtoId")
+                    ?: 0L
+
+            ProductDetailScreen(
+                produtoId = produtoId
+            )
 
         }
 
