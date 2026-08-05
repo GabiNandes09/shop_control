@@ -3,19 +3,22 @@ package com.rogue.shopcontrol.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
-import com.rogue.shopcontrol.domain.usecase.GetProdutosGastoUseCase
+import com.rogue.shopcontrol.data.local.entity.ProdutoItemComData
+import com.rogue.shopcontrol.domain.usecase.GetProdutoItensComDataUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProdutoSortOption
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProductListState
+import com.rogue.shopcontrol.utils.parseDataCompra
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 
 class ProductListViewModel(
-    private val getProdutosGasto: GetProdutosGastoUseCase
+    getProdutoItensComData: GetProdutoItensComDataUseCase
 ) : ViewModel() {
 
 
-    private var produtosOriginais: List<ProdutoGasto> = emptyList()
+    private var itensOriginais: List<ProdutoItemComData> = emptyList()
 
     private val _state =
         MutableStateFlow(
@@ -30,9 +33,9 @@ class ProductListViewModel(
 
         viewModelScope.launch {
 
-            getProdutosGasto().collect { produtos ->
+            getProdutoItensComData().collect { itens ->
 
-                produtosOriginais = produtos
+                itensOriginais = itens
 
                 aplicarFiltros()
 
@@ -67,29 +70,74 @@ class ProductListViewModel(
     }
 
 
+    fun onPreviousMonth() {
+
+        _state.value =
+            _state.value.copy(
+                selectedMonth = _state.value.selectedMonth.minusMonths(1)
+            )
+
+        aplicarFiltros()
+
+    }
+
+
+    fun onNextMonth() {
+
+        _state.value =
+            _state.value.copy(
+                selectedMonth = _state.value.selectedMonth.plusMonths(1)
+            )
+
+        aplicarFiltros()
+
+    }
+
+
     private fun aplicarFiltros() {
 
-        val filtro = _state.value.nameFilter
+        val mes = _state.value.selectedMonth
+        val nomeFiltro = _state.value.nameFilter
 
-        val filtrados =
-            produtosOriginais.filter { produto ->
+        val agregados =
+            itensOriginais
+                .filter { item ->
 
-                filtro.isBlank() ||
-                    produto.nome.contains(
-                        filtro,
-                        ignoreCase = true
+                    val data =
+                        parseDataCompra(item.dataCompra)
+
+                    data != null && YearMonth.from(data) == mes
+
+                }
+                .groupBy { it.produtoId to it.nomeProduto }
+                .map { (chave, itens) ->
+
+                    ProdutoGasto(
+                        id = chave.first,
+                        nome = chave.second,
+                        valorTotalGasto = itens.sumOf { it.valorTotal },
+                        quantidadeTotal = itens.sumOf { it.quantidade }
                     )
 
-            }
+                }
+                .filter { produto ->
+
+                    nomeFiltro.isBlank() ||
+                        produto.nome.contains(
+                            nomeFiltro,
+                            ignoreCase = true
+                        )
+
+                }
 
         val ordenados =
             when (_state.value.sortOption) {
 
                 ProdutoSortOption.VALOR_GASTO ->
-                    filtrados.sortedByDescending { it.valorTotalGasto }
+                    agregados.sortedByDescending { it.valorTotalGasto }
 
                 ProdutoSortOption.QUANTIDADE ->
-                    filtrados.sortedByDescending { it.quantidadeTotal }
+                    agregados.sortedByDescending { it.quantidadeTotal }
 
             }
 

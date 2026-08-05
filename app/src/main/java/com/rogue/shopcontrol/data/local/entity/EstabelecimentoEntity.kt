@@ -15,6 +15,8 @@ data class EstabelecimentoEntity(
 
     val cnpj: String,
 
-    val endereco: String
+    val endereco: String,
+
+    val apelido: String? = null
 
 )

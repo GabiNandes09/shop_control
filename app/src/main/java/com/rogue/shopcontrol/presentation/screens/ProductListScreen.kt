@@ -24,8 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.R
+import com.rogue.shopcontrol.presentation.components.MonthSelector
 import com.rogue.shopcontrol.presentation.components.ProductGastoRow
 import com.rogue.shopcontrol.presentation.components.ScreenHeader
 import com.rogue.shopcontrol.presentation.viewmodel.ProductListViewModel
@@ -35,6 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
+    onBackClick: () -> Unit,
     onProductClick: (Long) -> Unit,
     viewModel: ProductListViewModel = koinViewModel()
 ) {
@@ -45,7 +49,10 @@ fun ProductListScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        ScreenHeader("Todos os Produtos")
+        ScreenHeader(
+            title = stringResource(R.string.all_products_title),
+            onBackClick = onBackClick
+        )
 
         Column(
             modifier = Modifier
@@ -54,11 +61,17 @@ fun ProductListScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
+            MonthSelector(
+                selectedMonth = state.selectedMonth,
+                onPreviousMonth = viewModel::onPreviousMonth,
+                onNextMonth = viewModel::onNextMonth
+            )
+
             OutlinedTextField(
                 value = state.nameFilter,
                 onValueChange = viewModel::onNameFilterChanged,
                 label = {
-                    Text("Buscar por nome")
+                    Text(stringResource(R.string.search_by_name))
                 },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -74,11 +87,11 @@ fun ProductListScreen(
             ) {
 
                 OutlinedTextField(
-                    value = state.sortOption.label,
+                    value = stringResource(state.sortOption.labelRes),
                     onValueChange = {},
                     readOnly = true,
                     label = {
-                        Text("Ordenar por")
+                        Text(stringResource(R.string.sort_by))
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -99,7 +112,7 @@ fun ProductListScreen(
 
                         DropdownMenuItem(
                             text = {
-                                Text(option.label)
+                                Text(stringResource(option.labelRes))
                             },
                             onClick = {
                                 viewModel.onSortOptionSelected(option)
@@ -127,7 +140,7 @@ fun ProductListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Carregando...")
+                    Text(stringResource(R.string.loading))
 
                 }
 
@@ -141,7 +154,7 @@ fun ProductListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Nenhum produto encontrado")
+                    Text(stringResource(R.string.products_empty))
 
                 }
 

@@ -19,8 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.presentation.components.ConfirmDialog
 import com.rogue.shopcontrol.presentation.components.ProductListItem
 import com.rogue.shopcontrol.presentation.components.PurchaseSummaryCard
@@ -32,6 +34,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun PurchaseDetailScreen(
     compraId: Long,
+    onBackClick: () -> Unit,
     onDeleted: () -> Unit,
     viewModel: PurchaseDetailViewModel = koinViewModel(
         parameters = { parametersOf(compraId) }
@@ -56,7 +59,7 @@ fun PurchaseDetailScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        ScreenHeader()
+        ScreenHeader(onBackClick = onBackClick)
 
         val compra = state.compra
 
@@ -70,7 +73,7 @@ fun PurchaseDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Carregando...")
+                    Text(stringResource(R.string.loading))
 
                 }
 
@@ -84,7 +87,7 @@ fun PurchaseDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Compra não encontrada")
+                    Text(stringResource(R.string.purchase_not_found))
 
                 }
 
@@ -130,7 +133,7 @@ fun PurchaseDetailScreen(
                             )
                         ) {
 
-                            Text("Excluir compra")
+                            Text(stringResource(R.string.delete_purchase))
 
                         }
 
@@ -147,9 +150,9 @@ fun PurchaseDetailScreen(
     if (showDeleteConfirm) {
 
         ConfirmDialog(
-            title = "Excluir compra",
-            message = "Essa ação não pode ser desfeita. Deseja realmente excluir esta compra?",
-            confirmLabel = "Excluir",
+            title = stringResource(R.string.delete_purchase),
+            message = stringResource(R.string.delete_purchase_confirm_message),
+            confirmLabel = stringResource(R.string.delete),
             onConfirm = {
                 showDeleteConfirm = false
                 viewModel.delete()

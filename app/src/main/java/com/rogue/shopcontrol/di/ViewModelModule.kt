@@ -1,5 +1,9 @@
 package com.rogue.shopcontrol.di
+import com.rogue.shopcontrol.presentation.viewmodel.CategoryManagementViewModel
+import com.rogue.shopcontrol.presentation.viewmodel.EstablishmentDetailViewModel
+import com.rogue.shopcontrol.presentation.viewmodel.EstablishmentListViewModel
 import com.rogue.shopcontrol.presentation.viewmodel.HomeViewModel
+import com.rogue.shopcontrol.presentation.viewmodel.ProductCatalogViewModel
 import com.rogue.shopcontrol.presentation.viewmodel.ProductDetailViewModel
 import com.rogue.shopcontrol.presentation.viewmodel.ProductListViewModel
 import com.rogue.shopcontrol.presentation.viewmodel.PurchaseDetailViewModel
@@ -37,7 +41,23 @@ val viewModelModule = module {
     }
 
     viewModel { (produtoId: Long) ->
-        ProductDetailViewModel(produtoId, get(), get())
+        ProductDetailViewModel(produtoId, get(), get(), get(), get())
+    }
+
+    viewModel {
+        ProductCatalogViewModel(get())
+    }
+
+    viewModel {
+        CategoryManagementViewModel(get(), get(), get())
+    }
+
+    viewModel {
+        EstablishmentListViewModel(get())
+    }
+
+    viewModel { (estabelecimentoId: Long) ->
+        EstablishmentDetailViewModel(estabelecimentoId, get(), get(), get(), get())
     }
 
 }

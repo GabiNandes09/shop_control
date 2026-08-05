@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
@@ -21,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.presentation.components.ProductGastoRow
 import com.rogue.shopcontrol.presentation.components.StatCard
 import com.rogue.shopcontrol.presentation.viewmodel.HomeViewModel
@@ -37,12 +40,36 @@ fun HomeScreen(
     onRecordsClick: () -> Unit,
     onSpendingCardClick: () -> Unit,
     onProductsClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
+        topBar = {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, end = 8.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+
+                IconButton(
+                    onClick = onSettingsClick
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = stringResource(R.string.settings_content_description)
+                    )
+
+                }
+
+            }
+
+        },
         floatingActionButton = {
 
             FloatingActionButton(
@@ -51,7 +78,7 @@ fun HomeScreen(
 
                 Icon(
                     imageVector = Icons.Filled.CameraAlt,
-                    contentDescription = "Scanner"
+                    contentDescription = stringResource(R.string.scanner_content_description)
                 )
 
             }
@@ -72,12 +99,12 @@ fun HomeScreen(
                     .padding(16.dp)
             ) {
 
-                Text("Registros")
+                Text(stringResource(R.string.records_button))
 
             }
 
             StatCard(
-                title = "Valor gasto",
+                title = stringResource(R.string.spending_amount_title),
                 value = formatCurrency(state.gastoMensal),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +129,7 @@ fun HomeScreen(
                     ) {
 
                         Text(
-                            text = "Produtos",
+                            text = stringResource(R.string.products_section_title),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -113,7 +140,7 @@ fun HomeScreen(
 
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Ver todos os produtos"
+                                contentDescription = stringResource(R.string.view_all_products_content_description)
                             )
 
                         }

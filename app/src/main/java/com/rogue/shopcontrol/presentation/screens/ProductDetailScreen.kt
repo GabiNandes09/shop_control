@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.R
+import com.rogue.shopcontrol.presentation.components.CategoryPickerDialog
 import com.rogue.shopcontrol.presentation.components.ProductHistoryRow
 import com.rogue.shopcontrol.presentation.components.ProductSummaryCard
 import com.rogue.shopcontrol.presentation.components.ScreenHeader
@@ -24,6 +27,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ProductDetailScreen(
     produtoId: Long,
+    onBackClick: () -> Unit,
     viewModel: ProductDetailViewModel = koinViewModel(
         parameters = { parametersOf(produtoId) }
     )
@@ -35,7 +39,10 @@ fun ProductDetailScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        ScreenHeader("Detalhes do Produto")
+        ScreenHeader(
+            title = stringResource(R.string.product_detail_title),
+            onBackClick = onBackClick
+        )
 
         val produto = state.produto
 
@@ -49,7 +56,7 @@ fun ProductDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Carregando...")
+                    Text(stringResource(R.string.loading))
 
                 }
 
@@ -63,7 +70,7 @@ fun ProductDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text("Produto não encontrado")
+                    Text(stringResource(R.string.product_not_found))
 
                 }
 
@@ -80,7 +87,10 @@ fun ProductDetailScreen(
                     item {
 
                         ProductSummaryCard(
-                            produto = produto
+                            produto = produto,
+                            highestPrice = state.highestPrice,
+                            lowestPrice = state.lowestPrice,
+                            onAddCategoryClick = viewModel::onAddCategoryClick
                         )
 
                     }
@@ -88,7 +98,7 @@ fun ProductDetailScreen(
                     item {
 
                         Text(
-                            text = "Histórico de compras",
+                            text = stringResource(R.string.purchase_history_title),
                             style = MaterialTheme.typography.titleMedium
                         )
 
@@ -109,6 +119,16 @@ fun ProductDetailScreen(
             }
 
         }
+
+    }
+
+    if (state.showCategoryPicker) {
+
+        CategoryPickerDialog(
+            categorias = state.categorias,
+            onCategorySelected = viewModel::onCategorySelected,
+            onDismiss = viewModel::onCategoryPickerDismiss
+        )
 
     }
 

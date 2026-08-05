@@ -5,6 +5,7 @@ import com.rogue.shopcontrol.presentation.viewmodel.states.ScannerState
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.parser.NfceHtmlParser
 import com.rogue.shopcontrol.data.remote.api.NfceApi
 import com.rogue.shopcontrol.domain.usecase.SavePurchaseUseCase
@@ -57,7 +58,7 @@ class ScannerViewModel(
 
                     _state.value = ScannerState(
                         isScanning = false,
-                        error = "Não foi possível ler a nota fiscal"
+                        errorRes = R.string.scanner_error_empty_html
                     )
 
                     return@launch
@@ -94,7 +95,7 @@ class ScannerViewModel(
 
                 _state.value = ScannerState(
                     isScanning = false,
-                    error = "Erro ao processar a nota fiscal"
+                    errorRes = R.string.scanner_error_processing
                 )
 
             }

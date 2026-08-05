@@ -14,6 +14,14 @@ sealed class Routes(
 
     data object Products : Routes("products")
 
+    data object Settings : Routes("settings")
+
+    data object ProductCatalog : Routes("product_catalog")
+
+    data object CategoryManagement : Routes("category_management")
+
+    data object Establishments : Routes("establishments")
+
     data object PurchaseDetail : Routes("purchase_detail/{compraId}") {
 
         fun createRoute(compraId: Long) =
@@ -25,6 +33,13 @@ sealed class Routes(
 
         fun createRoute(produtoId: Long) =
             "product_detail/$produtoId"
+
+    }
+
+    data object EstablishmentDetail : Routes("establishment_detail/{estabelecimentoId}") {
+
+        fun createRoute(estabelecimentoId: Long) =
+            "establishment_detail/$estabelecimentoId"
 
     }
 }

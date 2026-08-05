@@ -12,9 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.presentation.components.SuccessDialog
 import com.rogue.shopcontrol.presentation.viewmodel.ScannerViewModel
 import com.rogue.shopcontrol.utils.startScanner
@@ -34,6 +36,9 @@ fun ScannerScreen(
         mutableStateOf(false)
     }
 
+    val cameraPermissionRequiredMessage =
+        stringResource(R.string.camera_permission_required)
+
 
     val permissionLauncher =
         rememberLauncherForActivityResult(
@@ -45,7 +50,7 @@ fun ScannerScreen(
             if (!granted) {
                 Toast.makeText(
                     context,
-                    "Permissão da câmera necessária",
+                    cameraPermissionRequiredMessage,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -73,14 +78,31 @@ fun ScannerScreen(
     state.savedCompraId?.let { compraId ->
 
         SuccessDialog(
-            title = "Compra salva",
-            message = "A nota fiscal foi lida e salva com sucesso.",
-            confirmLabel = "Ver detalhes",
+            title = stringResource(R.string.purchase_saved_title),
+            message = stringResource(R.string.purchase_saved_message),
+            confirmLabel = stringResource(R.string.view_details),
             onConfirm = {
                 viewModel.resetScanner()
                 onPurchaseSaved(compraId)
             }
         )
+
+    }
+
+
+    LaunchedEffect(state.errorRes) {
+
+        state.errorRes?.let { errorRes ->
+
+            Toast.makeText(
+                context,
+                context.getString(errorRes),
+                Toast.LENGTH_SHORT
+            ).show()
+
+            viewModel.resetScanner()
+
+        }
 
     }
 

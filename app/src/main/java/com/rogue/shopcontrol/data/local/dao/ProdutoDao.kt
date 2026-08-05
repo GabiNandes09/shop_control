@@ -3,9 +3,11 @@ package com.rogue.shopcontrol.data.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RoomWarnings
 import com.rogue.shopcontrol.data.local.entity.ProdutoCompraHistorico
 import com.rogue.shopcontrol.data.local.entity.ProdutoEntity
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
+import com.rogue.shopcontrol.data.local.entity.ProdutoItemComData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,6 +30,7 @@ interface ProdutoDao {
     ): ProdutoEntity?
 
 
+    @SuppressWarnings(RoomWarnings.QUERY_MISMATCH)
     @Query("""
         SELECT p.id AS id, p.nome AS nome,
                SUM(i.valorTotal) AS valorTotalGasto,
@@ -43,9 +46,12 @@ interface ProdutoDao {
     @Query("""
         SELECT p.id AS id, p.nome AS nome,
                SUM(i.valorTotal) AS valorTotalGasto,
-               SUM(i.quantidade) AS quantidadeTotal
+               SUM(i.quantidade) AS quantidadeTotal,
+               c.id AS categoriaId,
+               c.nome AS categoriaNome
         FROM produtos p
         INNER JOIN itens_compra i ON i.produtoId = p.id
+        LEFT JOIN categorias c ON c.id = p.categoriaId
         WHERE p.id = :produtoId
         GROUP BY p.id
     """)
@@ -55,6 +61,7 @@ interface ProdutoDao {
     @Query("""
         SELECT c.dataCompra AS dataCompra,
                e.nome AS nomeEstabelecimento,
+               e.apelido AS apelidoEstabelecimento,
                i.quantidade AS quantidade,
                i.valorUnitario AS valorUnitario,
                i.valorTotal AS valorTotal
@@ -65,5 +72,35 @@ interface ProdutoDao {
         ORDER BY c.dataCompra DESC
     """)
     fun getHistoricoProduto(produtoId: Long): Flow<List<ProdutoCompraHistorico>>
+
+
+    @Query("""
+        SELECT p.id AS produtoId, p.nome AS nomeProduto,
+               c.dataCompra AS dataCompra,
+               i.quantidade AS quantidade,
+               i.valorTotal AS valorTotal
+        FROM itens_compra i
+        INNER JOIN produtos p ON p.id = i.produtoId
+        INNER JOIN compras c ON c.id = i.compraId
+    """)
+    fun getProdutoItensComData(): Flow<List<ProdutoItemComData>>
+
+
+    @Query("""
+        SELECT * FROM produtos
+        ORDER BY nome ASC
+    """)
+    fun getAllProdutos(): Flow<List<ProdutoEntity>>
+
+
+    @Query("""
+        UPDATE produtos
+        SET categoriaId = :categoriaId
+        WHERE id = :produtoId
+    """)
+    suspend fun updateCategoria(
+        produtoId: Long,
+        categoriaId: Long
+    )
 
 }

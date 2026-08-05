@@ -8,8 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
 import com.rogue.shopcontrol.utils.formatCurrency
 
@@ -35,7 +37,7 @@ fun ProductGastoRow(
             )
 
             Text(
-                text = "Qtd: ${produto.quantidadeTotal}",
+                text = stringResource(R.string.product_qty_short, produto.quantidadeTotal),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

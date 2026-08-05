@@ -2,6 +2,8 @@ package com.rogue.shopcontrol.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rogue.shopcontrol.domain.usecase.AssignCategoriaToProdutoUseCase
+import com.rogue.shopcontrol.domain.usecase.GetCategoriasUseCase
 import com.rogue.shopcontrol.domain.usecase.GetHistoricoProdutoUseCase
 import com.rogue.shopcontrol.domain.usecase.GetProdutoGastoByIdUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProductDetailState
@@ -10,9 +12,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
-    produtoId: Long,
+    private val produtoId: Long,
     getProdutoGastoById: GetProdutoGastoByIdUseCase,
-    getHistoricoProduto: GetHistoricoProdutoUseCase
+    getHistoricoProduto: GetHistoricoProdutoUseCase,
+    getCategorias: GetCategoriasUseCase,
+    private val assignCategoriaToProduto: AssignCategoriaToProdutoUseCase
 ) : ViewModel() {
 
 
@@ -51,6 +55,55 @@ class ProductDetailViewModel(
                     )
 
             }
+
+        }
+
+        viewModelScope.launch {
+
+            getCategorias().collect { categorias ->
+
+                _state.value =
+                    _state.value.copy(
+                        categorias = categorias
+                    )
+
+            }
+
+        }
+
+    }
+
+
+    fun onAddCategoryClick() {
+
+        _state.value =
+            _state.value.copy(
+                showCategoryPicker = true
+            )
+
+    }
+
+
+    fun onCategoryPickerDismiss() {
+
+        _state.value =
+            _state.value.copy(
+                showCategoryPicker = false
+            )
+
+    }
+
+
+    fun onCategorySelected(categoriaId: Long) {
+
+        viewModelScope.launch {
+
+            assignCategoriaToProduto(produtoId, categoriaId)
+
+            _state.value =
+                _state.value.copy(
+                    showCategoryPicker = false
+                )
 
         }
 

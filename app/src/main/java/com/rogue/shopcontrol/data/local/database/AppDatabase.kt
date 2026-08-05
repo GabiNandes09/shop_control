@@ -13,7 +13,7 @@ import com.rogue.shopcontrol.data.local.entity.*
         CompraEntity::class,
         ItemCompraEntity::class
     ],
-    version = 1
+    version = 3
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun estabelecimentoDao(): EstabelecimentoDao
@@ -21,5 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
 
     abstract fun compraDao(): CompraDao
+
+    abstract fun categoriaDao(): CategoriaDao
 
 }

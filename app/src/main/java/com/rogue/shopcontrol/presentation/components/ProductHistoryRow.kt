@@ -10,8 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.ProdutoCompraHistorico
 import com.rogue.shopcontrol.utils.formatCurrency
 
@@ -29,13 +31,14 @@ fun ProductHistoryRow(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            Text(
-                text = historico.nomeEstabelecimento,
+            EstablishmentName(
+                nome = historico.nomeEstabelecimento,
+                apelido = historico.apelidoEstabelecimento,
                 style = MaterialTheme.typography.titleSmall
             )
 
             Text(
-                text = historico.dataCompra ?: "Data não informada",
+                text = historico.dataCompra ?: stringResource(R.string.data_not_informed),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -46,7 +49,11 @@ fun ProductHistoryRow(
             ) {
 
                 Text(
-                    text = "Qtd: ${historico.quantidade} • Unit: ${formatCurrency(historico.valorUnitario)}",
+                    text = stringResource(
+                        R.string.product_history_qty_unit,
+                        historico.quantidade,
+                        formatCurrency(historico.valorUnitario)
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
 

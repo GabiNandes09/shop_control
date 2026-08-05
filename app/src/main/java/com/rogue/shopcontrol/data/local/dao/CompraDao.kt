@@ -41,6 +41,15 @@ interface CompraDao {
     fun getCompraById(id: Long): Flow<CompraCompleta?>
 
 
+    @Transaction
+    @Query("""
+        SELECT * FROM compras
+        WHERE estabelecimentoId = :estabelecimentoId
+        ORDER BY dataCompra DESC
+    """)
+    fun getComprasByEstabelecimento(estabelecimentoId: Long): Flow<List<CompraCompleta>>
+
+
     @Query("""
         SELECT c.id FROM compras c
         INNER JOIN estabelecimentos e ON e.id = c.estabelecimentoId

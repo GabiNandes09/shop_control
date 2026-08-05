@@ -10,8 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.ItemCompraCompleto
 import com.rogue.shopcontrol.utils.formatCurrency
 
@@ -39,7 +41,7 @@ fun ProductListItem(
                 Spacer(Modifier.height(4.dp))
 
                 Text(
-                    text = "Código: $codigo",
+                    text = stringResource(R.string.product_code_label, codigo),
                     style = MaterialTheme.typography.bodySmall
                 )
 
@@ -48,21 +50,27 @@ fun ProductListItem(
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Quantidade: ${itemCompleto.item.quantidade}",
+                text = stringResource(R.string.quantity_label, itemCompleto.item.quantidade),
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Valor unitário: ${formatCurrency(itemCompleto.item.valorUnitario)}",
+                text = stringResource(
+                    R.string.unit_price_label,
+                    formatCurrency(itemCompleto.item.valorUnitario)
+                ),
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Valor total: ${formatCurrency(itemCompleto.item.valorTotal)}",
+                text = stringResource(
+                    R.string.total_price_label,
+                    formatCurrency(itemCompleto.item.valorTotal)
+                ),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )

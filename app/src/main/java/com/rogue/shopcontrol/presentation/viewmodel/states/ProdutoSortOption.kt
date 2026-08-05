@@ -1,8 +1,11 @@
 package com.rogue.shopcontrol.presentation.viewmodel.states
 
+import androidx.annotation.StringRes
+import com.rogue.shopcontrol.R
+
 enum class ProdutoSortOption(
-    val label: String
+    @param:StringRes val labelRes: Int
 ) {
-    VALOR_GASTO("Valor gasto"),
-    QUANTIDADE("Quantidade")
+    VALOR_GASTO(R.string.spending_amount_title),
+    QUANTIDADE(R.string.sort_option_quantity)
 }

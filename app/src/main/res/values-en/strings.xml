@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">Shop Control</string>
+
+    <!-- Common -->
+    <string name="loading">Loading…</string>
+    <string name="data_not_informed">Date not provided</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="back_content_description">Back</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+
+    <!-- Home -->
+    <string name="scanner_content_description">Scanner</string>
+    <string name="records_button">Records</string>
+    <string name="spending_amount_title">Amount spent</string>
+    <string name="products_section_title">Products</string>
+    <string name="view_all_products_content_description">View all products</string>
+
+    <!-- Scanner -->
+    <string name="camera_permission_required">Camera permission required</string>
+    <string name="purchase_saved_title">Purchase saved</string>
+    <string name="purchase_saved_message">The receipt was read and saved successfully.</string>
+    <string name="view_details">View details</string>
+    <string name="scanner_error_empty_html">Could not read the receipt</string>
+    <string name="scanner_error_processing">Error processing the receipt</string>
+
+    <!-- Records -->
+    <string name="records_header_title">Purchase Records</string>
+    <string name="records_empty">No purchases recorded</string>
+
+    <!-- Purchase detail -->
+    <string name="purchase_not_found">Purchase not found</string>
+    <string name="delete_purchase">Delete purchase</string>
+    <string name="delete_purchase_confirm_message">This action cannot be undone. Do you really want to delete this purchase?</string>
+    <string name="delete">Delete</string>
+    <string name="purchase_summary_label">PURCHASE SUMMARY</string>
+    <string name="cnpj_label">CNPJ: %1$s</string>
+    <string name="total_label">Total: %1$s</string>
+
+    <!-- Purchase item -->
+    <string name="product_code_label">Code: %1$s</string>
+    <string name="quantity_label">Quantity: %1$s</string>
+    <string name="unit_price_label">Unit price: %1$s</string>
+    <string name="total_price_label">Total price: %1$s</string>
+
+    <!-- Analytics -->
+    <string name="spending_comparison_title">Spending Comparison</string>
+    <string name="analytics_empty">Not enough data for comparison</string>
+
+    <!-- Product detail -->
+    <string name="product_detail_title">Product Details</string>
+    <string name="product_not_found">Product not found</string>
+    <string name="purchase_history_title">Purchase history</string>
+    <string name="quantity_total_label">Total quantity purchased: %1$s</string>
+    <string name="average_price_label">Average price: %1$s</string>
+    <string name="total_spent_label">Total spent: %1$s</string>
+    <string name="product_qty_short">Qty: %1$s</string>
+    <string name="product_history_qty_unit">Qty: %1$s • Unit: %2$s</string>
+
+    <!-- Product list -->
+    <string name="all_products_title">All Products</string>
+    <string name="search_by_name">Search by name</string>
+    <string name="sort_by">Sort by</string>
+    <string name="products_empty">No products found</string>
+
+    <!-- Sort options -->
+    <string name="sort_option_quantity">Quantity</string>
+
+    <!-- Settings -->
+    <string name="settings_content_description">Settings</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Product catalog -->
+    <string name="product_catalog_title">Registered Products</string>
+    <string name="products_registered_empty">No products registered</string>
+    <string name="highest_price_label">Highest price: %1$s</string>
+    <string name="lowest_price_label">Lowest price: %1$s</string>
+
+    <!-- Categories -->
+    <string name="categories_button">Categories</string>
+    <string name="category_label">Category: %1$s</string>
+    <string name="no_category">No category</string>
+    <string name="add_category_content_description">Add category</string>
+    <string name="select_category_title">Select category</string>
+    <string name="no_categories_available">No categories registered</string>
+    <string name="new_category_label">New category</string>
+    <string name="add">Add</string>
+    <string name="category_add_error">Invalid name or category already exists</string>
+    <string name="delete_category_content_description">Delete category</string>
+
+    <!-- Establishments -->
+    <string name="establishments_button">Establishments</string>
+    <string name="establishment_detail_title">Establishment Details</string>
+    <string name="establishment_not_found">Establishment not found</string>
+    <string name="establishments_empty">No establishments registered</string>
+    <string name="edit_apelido_content_description">Edit nickname</string>
+    <string name="edit_apelido_title">Establishment nickname</string>
+    <string name="apelido_label">Nickname</string>
+    <string name="save">Save</string>
+    <string name="establishment_purchases_empty">No purchases this month</string>
+</resources>

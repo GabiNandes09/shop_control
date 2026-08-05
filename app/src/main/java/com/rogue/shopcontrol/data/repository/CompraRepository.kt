@@ -35,13 +35,17 @@ class CompraRepository(
 
 
         val estabelecimentoId =
-            estabelecimentoDao.insert(
-                EstabelecimentoEntity(
-                    nome = data.estabelecimento.nome,
-                    cnpj = data.estabelecimento.cnpj,
-                    endereco = data.estabelecimento.endereco
-                )
+            estabelecimentoDao.findByCnpj(
+                data.estabelecimento.cnpj
             )
+                ?.id
+                ?: estabelecimentoDao.insert(
+                    EstabelecimentoEntity(
+                        nome = data.estabelecimento.nome,
+                        cnpj = data.estabelecimento.cnpj,
+                        endereco = data.estabelecimento.endereco
+                    )
+                )
 
 
         val compraId =
@@ -102,6 +106,12 @@ class CompraRepository(
         compraId: Long
     ): Flow<CompraCompleta?> =
         compraDao.getCompraById(compraId)
+
+
+    fun getComprasByEstabelecimento(
+        estabelecimentoId: Long
+    ): Flow<List<CompraCompleta>> =
+        compraDao.getComprasByEstabelecimento(estabelecimentoId)
 
 
     suspend fun deleteCompra(
