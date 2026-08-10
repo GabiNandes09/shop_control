@@ -20,6 +20,7 @@ fun StatCard(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
+    subtitle: String? = null,
     onClick: (() -> Unit)? = null
 ) {
 
@@ -55,6 +56,17 @@ fun StatCard(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
+
+            subtitle?.let {
+
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+            }
 
         }
 

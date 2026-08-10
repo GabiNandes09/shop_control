@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
@@ -71,7 +72,10 @@ fun ProductSummaryCard(
                         R.string.category_label,
                         produto.categoriaNome ?: stringResource(R.string.no_category)
                     ),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
 
                 IconButton(

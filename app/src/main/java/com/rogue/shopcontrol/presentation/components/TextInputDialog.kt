@@ -9,7 +9,9 @@ import androidx.compose.ui.res.stringResource
 import com.rogue.shopcontrol.R
 
 @Composable
-fun EditApelidoDialog(
+fun TextInputDialog(
+    title: String,
+    label: String,
     value: String,
     onValueChange: (String) -> Unit,
     onSave: () -> Unit,
@@ -19,7 +21,7 @@ fun EditApelidoDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.edit_apelido_title))
+            Text(title)
         },
         text = {
 
@@ -27,7 +29,7 @@ fun EditApelidoDialog(
                 value = value,
                 onValueChange = onValueChange,
                 label = {
-                    Text(stringResource(R.string.apelido_label))
+                    Text(label)
                 },
                 singleLine = true
             )

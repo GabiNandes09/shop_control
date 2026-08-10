@@ -2,6 +2,7 @@ package com.rogue.shopcontrol.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rogue.shopcontrol.data.local.entity.ProdutoEntity
 import com.rogue.shopcontrol.domain.usecase.GetAllProdutosUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProductCatalogState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +13,8 @@ class ProductCatalogViewModel(
     getAllProdutos: GetAllProdutosUseCase
 ) : ViewModel() {
 
+
+    private var produtosOriginais: List<ProdutoEntity> = emptyList()
 
     private val _state =
         MutableStateFlow(
@@ -28,14 +31,46 @@ class ProductCatalogViewModel(
 
             getAllProdutos().collect { produtos ->
 
-                _state.value = ProductCatalogState(
-                    produtos = produtos,
-                    isLoading = false
-                )
+                produtosOriginais = produtos
+
+                aplicarFiltro()
 
             }
 
         }
+
+    }
+
+
+    fun onNameFilterChanged(query: String) {
+
+        _state.value =
+            _state.value.copy(
+                nameFilter = query
+            )
+
+        aplicarFiltro()
+
+    }
+
+
+    private fun aplicarFiltro() {
+
+        val filtro = _state.value.nameFilter
+
+        val filtrados =
+            produtosOriginais.filter { produto ->
+
+                filtro.isBlank() ||
+                    produto.nome.contains(filtro, ignoreCase = true)
+
+            }
+
+        _state.value =
+            _state.value.copy(
+                produtos = filtrados,
+                isLoading = false
+            )
 
     }
 

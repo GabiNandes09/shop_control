@@ -76,12 +76,14 @@ interface ProdutoDao {
 
     @Query("""
         SELECT p.id AS produtoId, p.nome AS nomeProduto,
+               cat.id AS categoriaId, cat.nome AS categoriaNome,
                c.dataCompra AS dataCompra,
                i.quantidade AS quantidade,
                i.valorTotal AS valorTotal
         FROM itens_compra i
         INNER JOIN produtos p ON p.id = i.produtoId
         INNER JOIN compras c ON c.id = i.compraId
+        LEFT JOIN categorias cat ON cat.id = p.categoriaId
     """)
     fun getProdutoItensComData(): Flow<List<ProdutoItemComData>>
 

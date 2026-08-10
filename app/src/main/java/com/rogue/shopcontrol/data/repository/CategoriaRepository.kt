@@ -2,6 +2,7 @@ package com.rogue.shopcontrol.data.repository
 
 import com.rogue.shopcontrol.data.local.dao.CategoriaDao
 import com.rogue.shopcontrol.data.local.entity.CategoriaEntity
+import com.rogue.shopcontrol.data.local.entity.CategoriaGasto
 import kotlinx.coroutines.flow.Flow
 
 class CategoriaRepository(
@@ -10,6 +11,10 @@ class CategoriaRepository(
 
     fun getCategorias(): Flow<List<CategoriaEntity>> =
         categoriaDao.getAll()
+
+
+    fun getCategoriasGasto(): Flow<List<CategoriaGasto>> =
+        categoriaDao.getCategoriasGasto()
 
 
     suspend fun addCategoria(
@@ -34,6 +39,31 @@ class CategoriaRepository(
                 nome = nomeTrimmed
             )
         )
+
+        return true
+
+    }
+
+
+    suspend fun updateCategoria(
+        categoriaId: Long,
+        nome: String
+    ): Boolean {
+
+        val nomeTrimmed = nome.trim()
+
+        if (nomeTrimmed.isBlank()) {
+            return false
+        }
+
+        val existente =
+            categoriaDao.findByName(nomeTrimmed)
+
+        if (existente != null && existente.id != categoriaId) {
+            return false
+        }
+
+        categoriaDao.updateNome(categoriaId, nomeTrimmed)
 
         return true
 

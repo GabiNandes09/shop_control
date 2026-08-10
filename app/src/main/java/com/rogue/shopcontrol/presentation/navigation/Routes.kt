@@ -22,6 +22,8 @@ sealed class Routes(
 
     data object Establishments : Routes("establishments")
 
+    data object CategorySpending : Routes("category_spending")
+
     data object PurchaseDetail : Routes("purchase_detail/{compraId}") {
 
         fun createRoute(compraId: Long) =

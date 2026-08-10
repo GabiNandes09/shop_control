@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +22,7 @@ import com.rogue.shopcontrol.data.local.entity.CategoriaEntity
 @Composable
 fun CategoryListItem(
     categoria: CategoriaEntity,
+    onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -44,6 +46,17 @@ fun CategoryListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f)
             )
+
+            IconButton(
+                onClick = onEditClick
+            ) {
+
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = stringResource(R.string.edit_category_content_description)
+                )
+
+            }
 
             IconButton(
                 onClick = onDeleteClick

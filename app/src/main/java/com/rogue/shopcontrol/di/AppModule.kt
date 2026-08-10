@@ -9,6 +9,7 @@ import com.rogue.shopcontrol.domain.usecase.AssignCategoriaToProdutoUseCase
 import com.rogue.shopcontrol.domain.usecase.DeleteCategoriaUseCase
 import com.rogue.shopcontrol.domain.usecase.DeleteCompraUseCase
 import com.rogue.shopcontrol.domain.usecase.GetAllProdutosUseCase
+import com.rogue.shopcontrol.domain.usecase.GetCategoriasGastoUseCase
 import com.rogue.shopcontrol.domain.usecase.GetCategoriasUseCase
 import com.rogue.shopcontrol.domain.usecase.GetCompraByIdUseCase
 import com.rogue.shopcontrol.domain.usecase.GetComprasByEstabelecimentoUseCase
@@ -24,6 +25,7 @@ import com.rogue.shopcontrol.domain.usecase.GetProdutoItensComDataUseCase
 import com.rogue.shopcontrol.domain.usecase.GetProdutosGastoUseCase
 import com.rogue.shopcontrol.domain.usecase.SavePurchaseUseCase
 import com.rogue.shopcontrol.domain.usecase.UpdateApelidoEstabelecimentoUseCase
+import com.rogue.shopcontrol.domain.usecase.UpdateCategoriaUseCase
 import org.koin.dsl.module
 
 val appModule = module {
@@ -146,6 +148,16 @@ val appModule = module {
     }
     factory {
         GetComprasByEstabelecimentoUseCase(
+            get()
+        )
+    }
+    factory {
+        UpdateCategoriaUseCase(
+            get()
+        )
+    }
+    factory {
+        GetCategoriasGastoUseCase(
             get()
         )
     }

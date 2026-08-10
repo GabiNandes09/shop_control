@@ -1,6 +1,7 @@
 package com.rogue.shopcontrol.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.R
+import com.rogue.shopcontrol.presentation.components.FilterOverlay
+import com.rogue.shopcontrol.presentation.components.FilterToggleChip
 import com.rogue.shopcontrol.presentation.components.MonthSelector
 import com.rogue.shopcontrol.presentation.components.ProductGastoRow
 import com.rogue.shopcontrol.presentation.components.ScreenHeader
@@ -45,6 +47,10 @@ fun ProductListScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    var filtersExpanded by remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -54,71 +60,74 @@ fun ProductListScreen(
             onBackClick = onBackClick
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+        FilterToggleChip(
+            expanded = filtersExpanded,
+            onClick = { filtersExpanded = !filtersExpanded },
+            modifier = Modifier.padding(16.dp)
+        )
+
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
 
-            MonthSelector(
-                selectedMonth = state.selectedMonth,
-                onPreviousMonth = viewModel::onPreviousMonth,
-                onNextMonth = viewModel::onNextMonth
-            )
+            when {
 
-            OutlinedTextField(
-                value = state.nameFilter,
-                onValueChange = viewModel::onNameFilterChanged,
-                label = {
-                    Text(stringResource(R.string.search_by_name))
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+                state.isLoading -> {
 
-            var expanded by remember {
-                mutableStateOf(false)
-            }
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
 
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
-            ) {
+                        Text(stringResource(R.string.loading))
 
-                OutlinedTextField(
-                    value = stringResource(state.sortOption.labelRes),
-                    onValueChange = {},
-                    readOnly = true,
-                    label = {
-                        Text(stringResource(R.string.sort_by))
-                    },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
-                        )
-                    },
-                    modifier = Modifier
-                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth()
-                )
+                    }
 
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
+                }
 
-                    ProdutoSortOption.entries.forEach { option ->
+                state.produtos.isEmpty() -> {
 
-                        DropdownMenuItem(
-                            text = {
-                                Text(stringResource(option.labelRes))
-                            },
-                            onClick = {
-                                viewModel.onSortOptionSelected(option)
-                                expanded = false
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Text(stringResource(R.string.products_empty))
+
+                    }
+
+                }
+
+                else -> {
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+                        items(
+                            items = state.produtos,
+                            key = { it.id }
+                        ) { produto ->
+
+                            Card(
+                                onClick = {
+                                    onProductClick(produto.id)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+
+                                ProductGastoRow(
+                                    produto = produto,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+
                             }
-                        )
+
+                        }
 
                     }
 
@@ -126,63 +135,136 @@ fun ProductListScreen(
 
             }
 
-        }
+            FilterOverlay(
+                expanded = filtersExpanded,
+                onDismiss = { filtersExpanded = false }
+            ) {
 
-        HorizontalDivider()
+                MonthSelector(
+                    selectedMonth = state.selectedMonth,
+                    onPreviousMonth = viewModel::onPreviousMonth,
+                    onNextMonth = viewModel::onNextMonth
+                )
 
-        when {
+                OutlinedTextField(
+                    value = state.nameFilter,
+                    onValueChange = viewModel::onNameFilterChanged,
+                    label = {
+                        Text(stringResource(R.string.search_by_name))
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            state.isLoading -> {
+                var sortExpanded by remember {
+                    mutableStateOf(false)
+                }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                ExposedDropdownMenuBox(
+                    expanded = sortExpanded,
+                    onExpandedChange = { sortExpanded = it }
                 ) {
 
-                    Text(stringResource(R.string.loading))
+                    OutlinedTextField(
+                        value = stringResource(state.sortOption.labelRes),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = {
+                            Text(stringResource(R.string.sort_by))
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = sortExpanded
+                            )
+                        },
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth()
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = sortExpanded,
+                        onDismissRequest = { sortExpanded = false }
+                    ) {
+
+                        ProdutoSortOption.entries.forEach { option ->
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(stringResource(option.labelRes))
+                                },
+                                onClick = {
+                                    viewModel.onSortOptionSelected(option)
+                                    sortExpanded = false
+                                }
+                            )
+
+                        }
+
+                    }
 
                 }
 
-            }
-
-            state.produtos.isEmpty() -> {
-
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Text(stringResource(R.string.products_empty))
-
+                var categoryExpanded by remember {
+                    mutableStateOf(false)
                 }
 
-            }
+                val todasCategoriasLabel =
+                    stringResource(R.string.all_categories_option)
 
-            else -> {
+                val selectedCategoryName =
+                    state.categorias
+                        .firstOrNull { it.id == state.selectedCategoryId }
+                        ?.nome
+                        ?: todasCategoriasLabel
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ExposedDropdownMenuBox(
+                    expanded = categoryExpanded,
+                    onExpandedChange = { categoryExpanded = it }
                 ) {
 
-                    items(
-                        items = state.produtos,
-                        key = { it.id }
-                    ) { produto ->
+                    OutlinedTextField(
+                        value = selectedCategoryName,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = {
+                            Text(stringResource(R.string.category_filter_label))
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = categoryExpanded
+                            )
+                        },
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth()
+                    )
 
-                        Card(
-                            onClick = {
-                                onProductClick(produto.id)
+                    ExposedDropdownMenu(
+                        expanded = categoryExpanded,
+                        onDismissRequest = { categoryExpanded = false }
+                    ) {
+
+                        DropdownMenuItem(
+                            text = {
+                                Text(todasCategoriasLabel)
                             },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
+                            onClick = {
+                                viewModel.onCategoryFilterSelected(null)
+                                categoryExpanded = false
+                            }
+                        )
 
-                            ProductGastoRow(
-                                produto = produto,
-                                modifier = Modifier.padding(16.dp)
+                        state.categorias.forEach { categoria ->
+
+                            DropdownMenuItem(
+                                text = {
+                                    Text(categoria.nome)
+                                },
+                                onClick = {
+                                    viewModel.onCategoryFilterSelected(categoria.id)
+                                    categoryExpanded = false
+                                }
                             )
 
                         }

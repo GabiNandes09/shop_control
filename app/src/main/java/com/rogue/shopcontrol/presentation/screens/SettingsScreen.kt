@@ -15,7 +15,6 @@ import com.rogue.shopcontrol.presentation.components.ScreenHeader
 
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit,
     onProductsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onEstablishmentsClick: () -> Unit
@@ -26,8 +25,7 @@ fun SettingsScreen(
     ) {
 
         ScreenHeader(
-            title = stringResource(R.string.settings_title),
-            onBackClick = onBackClick
+            title = stringResource(R.string.settings_title)
         )
 
         Column(

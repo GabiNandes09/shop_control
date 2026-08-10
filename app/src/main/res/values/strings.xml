@@ -10,8 +10,10 @@
     <string name="back_content_description">Voltar</string>
     <string name="previous_month">Mês anterior</string>
     <string name="next_month">Próximo mês</string>
+    <string name="filters_button">Filtros</string>
 
     <!-- Home -->
+    <string name="home_tab_label">Início</string>
     <string name="scanner_content_description">Scanner</string>
     <string name="records_button">Registros</string>
     <string name="spending_amount_title">Valor gasto</string>
@@ -89,6 +91,12 @@
     <string name="add">Adicionar</string>
     <string name="category_add_error">Nome inválido ou categoria já existente</string>
     <string name="delete_category_content_description">Excluir categoria</string>
+    <string name="edit_category_content_description">Editar categoria</string>
+    <string name="edit_category_title">Renomear categoria</string>
+    <string name="category_name_label">Nome da categoria</string>
+    <string name="category_spending_title">Gasto por Categoria</string>
+    <string name="all_categories_option">Todas as categorias</string>
+    <string name="category_filter_label">Categoria</string>
 
     <!-- Establishments -->
     <string name="establishments_button">Estabelecimentos</string>

@@ -54,7 +54,8 @@ fun EstablishmentSummaryCard(
                 EstablishmentName(
                     nome = estabelecimento.nome,
                     apelido = estabelecimento.apelido,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.weight(1f)
                 )
 
                 IconButton(

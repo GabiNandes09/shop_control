@@ -6,6 +6,9 @@ import com.rogue.shopcontrol.data.local.entity.CategoriaEntity
 data class CategoryManagementState(
     val categorias: List<CategoriaEntity> = emptyList(),
     val newCategoryName: String = "",
+    val nameFilter: String = "",
+    val editingCategoria: CategoriaEntity? = null,
+    val editCategoryName: String = "",
     @param:StringRes val errorRes: Int? = null,
     val isLoading: Boolean = true
 )

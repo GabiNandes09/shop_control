@@ -10,8 +10,10 @@
     <string name="back_content_description">Back</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
+    <string name="filters_button">Filters</string>
 
     <!-- Home -->
+    <string name="home_tab_label">Home</string>
     <string name="scanner_content_description">Scanner</string>
     <string name="records_button">Records</string>
     <string name="spending_amount_title">Amount spent</string>
@@ -89,6 +91,12 @@
     <string name="add">Add</string>
     <string name="category_add_error">Invalid name or category already exists</string>
     <string name="delete_category_content_description">Delete category</string>
+    <string name="edit_category_content_description">Edit category</string>
+    <string name="edit_category_title">Rename category</string>
+    <string name="category_name_label">Category name</string>
+    <string name="category_spending_title">Spending by Category</string>
+    <string name="all_categories_option">All categories</string>
+    <string name="category_filter_label">Category</string>
 
     <!-- Establishments -->
     <string name="establishments_button">Establishments</string>

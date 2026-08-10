@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -31,45 +29,22 @@ import com.rogue.shopcontrol.presentation.components.ProductGastoRow
 import com.rogue.shopcontrol.presentation.components.StatCard
 import com.rogue.shopcontrol.presentation.viewmodel.HomeViewModel
 import com.rogue.shopcontrol.utils.formatCurrency
+import com.rogue.shopcontrol.utils.formatMonthYear
 import org.koin.androidx.compose.koinViewModel
+import java.time.YearMonth
 
 
 @Composable
 fun HomeScreen(
     onScannerClick: () -> Unit,
-    onRecordsClick: () -> Unit,
     onSpendingCardClick: () -> Unit,
     onProductsClick: () -> Unit,
-    onSettingsClick: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, end = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-
-                IconButton(
-                    onClick = onSettingsClick
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Filled.Settings,
-                        contentDescription = stringResource(R.string.settings_content_description)
-                    )
-
-                }
-
-            }
-
-        },
         floatingActionButton = {
 
             FloatingActionButton(
@@ -92,23 +67,13 @@ fun HomeScreen(
                 .padding(innerPadding)
         ) {
 
-            Button(
-                onClick = onRecordsClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-
-                Text(stringResource(R.string.records_button))
-
-            }
-
             StatCard(
                 title = stringResource(R.string.spending_amount_title),
                 value = formatCurrency(state.gastoMensal),
+                subtitle = formatMonthYear(YearMonth.now()),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(16.dp),
                 onClick = onSpendingCardClick
             )
 

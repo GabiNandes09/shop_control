@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
 import com.rogue.shopcontrol.data.local.entity.ProdutoItemComData
+import com.rogue.shopcontrol.domain.usecase.GetCategoriasUseCase
 import com.rogue.shopcontrol.domain.usecase.GetProdutoItensComDataUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProdutoSortOption
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProductListState
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 import java.time.YearMonth
 
 class ProductListViewModel(
-    getProdutoItensComData: GetProdutoItensComDataUseCase
+    getProdutoItensComData: GetProdutoItensComDataUseCase,
+    getCategorias: GetCategoriasUseCase
 ) : ViewModel() {
 
 
@@ -43,6 +45,19 @@ class ProductListViewModel(
 
         }
 
+        viewModelScope.launch {
+
+            getCategorias().collect { categorias ->
+
+                _state.value =
+                    _state.value.copy(
+                        categorias = categorias
+                    )
+
+            }
+
+        }
+
     }
 
 
@@ -63,6 +78,18 @@ class ProductListViewModel(
         _state.value =
             _state.value.copy(
                 nameFilter = query
+            )
+
+        aplicarFiltros()
+
+    }
+
+
+    fun onCategoryFilterSelected(categoriaId: Long?) {
+
+        _state.value =
+            _state.value.copy(
+                selectedCategoryId = categoriaId
             )
 
         aplicarFiltros()
@@ -98,6 +125,7 @@ class ProductListViewModel(
 
         val mes = _state.value.selectedMonth
         val nomeFiltro = _state.value.nameFilter
+        val categoriaFiltro = _state.value.selectedCategoryId
 
         val agregados =
             itensOriginais
@@ -112,21 +140,32 @@ class ProductListViewModel(
                 .groupBy { it.produtoId to it.nomeProduto }
                 .map { (chave, itens) ->
 
+                    val primeiro = itens.first()
+
                     ProdutoGasto(
                         id = chave.first,
                         nome = chave.second,
                         valorTotalGasto = itens.sumOf { it.valorTotal },
-                        quantidadeTotal = itens.sumOf { it.quantidade }
+                        quantidadeTotal = itens.sumOf { it.quantidade },
+                        categoriaId = primeiro.categoriaId,
+                        categoriaNome = primeiro.categoriaNome
                     )
 
                 }
                 .filter { produto ->
 
-                    nomeFiltro.isBlank() ||
-                        produto.nome.contains(
-                            nomeFiltro,
-                            ignoreCase = true
-                        )
+                    val passaNome =
+                        nomeFiltro.isBlank() ||
+                            produto.nome.contains(
+                                nomeFiltro,
+                                ignoreCase = true
+                            )
+
+                    val passaCategoria =
+                        categoriaFiltro == null ||
+                            produto.categoriaId == categoriaFiltro
+
+                    passaNome && passaCategoria
 
                 }
 
