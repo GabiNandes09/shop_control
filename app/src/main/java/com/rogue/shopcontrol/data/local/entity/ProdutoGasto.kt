@@ -6,5 +6,7 @@ data class ProdutoGasto(
     val valorTotalGasto: Double,
     val quantidadeTotal: Double,
     val categoriaId: Long? = null,
-    val categoriaNome: String? = null
+    val categoriaNome: String? = null,
+    val apelido: String? = null,
+    val codigoBarras: String? = null
 )

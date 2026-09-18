@@ -26,7 +26,7 @@ fun EstablishmentGastoRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        EstablishmentName(
+        EntityName(
             nome = estabelecimento.nome,
             apelido = estabelecimento.apelido,
             style = MaterialTheme.typography.bodyMedium,

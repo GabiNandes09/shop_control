@@ -21,7 +21,8 @@ fun startScanner(
     context: Context,
     lifecycleOwner: LifecycleOwner,
     previewView: PreviewView,
-    onQrCodeRead: (String) -> Unit
+    onQrCodeRead: (String) -> Unit,
+    formats: List<Int> = listOf(Barcode.FORMAT_QR_CODE)
 ) {
 
     val cameraProviderFuture =
@@ -50,7 +51,8 @@ fun startScanner(
             BarcodeScanning.getClient(
                 BarcodeScannerOptions.Builder()
                     .setBarcodeFormats(
-                        Barcode.FORMAT_QR_CODE
+                        formats.first(),
+                        *formats.drop(1).toIntArray()
                     )
                     .build()
             )

@@ -62,7 +62,8 @@ class ProductCatalogViewModel(
             produtosOriginais.filter { produto ->
 
                 filtro.isBlank() ||
-                    produto.nome.contains(filtro, ignoreCase = true)
+                    produto.nome.contains(filtro, ignoreCase = true) ||
+                    produto.apelido?.contains(filtro, ignoreCase = true) == true
 
             }
 

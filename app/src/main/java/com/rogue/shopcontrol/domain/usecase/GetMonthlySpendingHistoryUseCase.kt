@@ -20,7 +20,7 @@ class GetMonthlySpendingHistoryUseCase(
             compras
                 .mapNotNull { compraCompleta ->
 
-                    parseDataCompra(compraCompleta.compra.dataCompra)?.let { data ->
+                    parseDataCompra(compraCompleta.compra.dataParaFiltro)?.let { data ->
                         YearMonth.from(data) to compraCompleta.compra.valorTotal
                     }
 

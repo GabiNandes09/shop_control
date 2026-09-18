@@ -8,17 +8,22 @@
     <string name="cancel">Cancelar</string>
     <string name="ok">OK</string>
     <string name="back_content_description">Voltar</string>
-    <string name="previous_month">Mês anterior</string>
-    <string name="next_month">Próximo mês</string>
     <string name="filters_button">Filtros</string>
+    <string name="date_range_start_label">De: %1$s</string>
+    <string name="date_range_end_label">Até: %1$s</string>
+    <string name="date_range_previous_content_description">Período anterior</string>
+    <string name="date_range_next_content_description">Próximo período</string>
+    <string name="date_range_picker_title">Selecionar período</string>
 
     <!-- Home -->
     <string name="home_tab_label">Início</string>
+    <string name="analise_tab_label">Análise</string>
     <string name="scanner_content_description">Scanner</string>
     <string name="records_button">Registros</string>
     <string name="spending_amount_title">Valor gasto</string>
     <string name="products_section_title">Produtos</string>
     <string name="view_all_products_content_description">Ver todos os produtos</string>
+    <string name="view_all_establishments_content_description">Ver todos os estabelecimentos</string>
 
     <!-- Scanner -->
     <string name="camera_permission_required">Permissão da câmera necessária</string>
@@ -27,6 +32,8 @@
     <string name="view_details">Ver detalhes</string>
     <string name="scanner_error_empty_html">Não foi possível ler a nota fiscal</string>
     <string name="scanner_error_processing">Erro ao processar a nota fiscal</string>
+    <string name="scanner_error_invalid_nota">QR Code inválido ou nota não encontrada. Confira se o código está correto e tente novamente.</string>
+    <string name="scanner_loading">Lendo nota fiscal…</string>
 
     <!-- Records -->
     <string name="records_header_title">Registros de Compras</string>
@@ -46,6 +53,8 @@
     <string name="quantity_label">Quantidade: %1$s</string>
     <string name="unit_price_label">Valor unitário: %1$s</string>
     <string name="total_price_label">Valor total: %1$s</string>
+    <string name="price_increase_content_description">Preço subiu</string>
+    <string name="price_decrease_content_description">Preço baixou</string>
 
     <!-- Analytics -->
     <string name="spending_comparison_title">Comparação de Gastos</string>
@@ -53,6 +62,7 @@
 
     <!-- Product detail -->
     <string name="product_detail_title">Detalhes do Produto</string>
+    <string name="product_options_content_description">Opções do produto</string>
     <string name="product_not_found">Produto não encontrado</string>
     <string name="purchase_history_title">Histórico de compras</string>
     <string name="quantity_total_label">Quantidade total comprada: %1$s</string>
@@ -73,6 +83,15 @@
     <!-- Settings -->
     <string name="settings_content_description">Configurações</string>
     <string name="settings_title">Configurações</string>
+    <string name="export_data_button">Exportar dados (JSON)</string>
+    <string name="export_data_in_progress">Exportando…</string>
+    <string name="export_error">Erro ao exportar os dados</string>
+    <string name="import_data_button">Importar dados (JSON)</string>
+    <string name="import_data_in_progress">Importando…</string>
+    <string name="import_error">Erro ao importar os dados. Verifique se o arquivo é um backup do ShopControl válido.</string>
+    <string name="import_confirm_title">Importar dados</string>
+    <string name="import_confirm_message">Os dados do arquivo selecionado serão adicionados ao app (estabelecimentos, produtos e categorias já existentes com o mesmo nome/CNPJ são reaproveitados, não duplicados). Essa ação não pode ser desfeita. Deseja continuar?</string>
+    <string name="import_success_message">Importado: %1$d estabelecimentos, %2$d produtos, %3$d compras, %4$d lançamentos de renda</string>
 
     <!-- Product catalog -->
     <string name="product_catalog_title">Produtos Cadastrados</string>
@@ -81,11 +100,12 @@
     <string name="lowest_price_label">Valor mais baixo: %1$s</string>
 
     <!-- Categories -->
-    <string name="categories_button">Categorias</string>
+    <string name="categories_button">Categorias de Produtos</string>
     <string name="category_label">Categoria: %1$s</string>
     <string name="no_category">Sem categoria</string>
     <string name="add_category_content_description">Adicionar categoria</string>
     <string name="select_category_title">Selecionar categoria</string>
+    <string name="create_category_option">Criar categoria \"%1$s\"</string>
     <string name="no_categories_available">Nenhuma categoria cadastrada</string>
     <string name="new_category_label">Nova categoria</string>
     <string name="add">Adicionar</string>
@@ -97,10 +117,24 @@
     <string name="category_spending_title">Gasto por Categoria</string>
     <string name="all_categories_option">Todas as categorias</string>
     <string name="category_filter_label">Categoria</string>
+    <string name="add_category_dialog_title">Nova categoria</string>
+    <string name="categoria_grupo_label">Grupo: %1$s</string>
+    <string name="categoria_grupo_content_description">Definir grupo</string>
+    <string name="select_grupo_title">Selecionar grupo</string>
+    <string name="remove_grupo_option">Remover do grupo</string>
+    <string name="link_produtos_content_description">Vincular produtos</string>
+    <string name="link_produtos_title">Vincular produtos à categoria</string>
+    <string name="link_produtos_save_button">Salvar vínculos</string>
+    <string name="link_produtos_selecionados_count">%1$d produto(s) selecionado(s)</string>
+    <string name="produto_tem_ean_content_description">Tem código de barras</string>
+    <string name="produto_sem_ean_content_description">Sem código de barras</string>
+    <string name="produto_tem_categoria_content_description">Tem categoria</string>
+    <string name="produto_sem_categoria_content_description">Sem categoria</string>
 
     <!-- Establishments -->
     <string name="establishments_button">Estabelecimentos</string>
     <string name="establishment_detail_title">Detalhes do Estabelecimento</string>
+    <string name="establishment_options_content_description">Opções do estabelecimento</string>
     <string name="establishment_not_found">Estabelecimento não encontrado</string>
     <string name="establishments_empty">Nenhum estabelecimento cadastrado</string>
     <string name="edit_apelido_content_description">Editar apelido</string>
@@ -108,4 +142,168 @@
     <string name="apelido_label">Apelido</string>
     <string name="save">Salvar</string>
     <string name="establishment_purchases_empty">Nenhuma compra neste mês</string>
+
+    <!-- Manual purchase entry -->
+    <string name="scan_nfce_option">Escanear NFC-e</string>
+    <string name="add_manual_option">Adicionar manualmente</string>
+    <string name="manual_purchase_title">Nova compra manual</string>
+    <string name="edit_purchase">Editar</string>
+    <string name="manual_purchase_badge">Cadastro manual</string>
+    <string name="establishment_name_label">Nome do estabelecimento</string>
+    <string name="purchase_date_label">Data: %1$s</string>
+    <string name="items_section_title">Itens</string>
+    <string name="add_item_content_description">Adicionar item</string>
+    <string name="remove_item_content_description">Remover item</string>
+    <string name="product_name_label">Nome do produto</string>
+    <string name="item_quantity_label">Quantidade</string>
+    <string name="item_unit_price_label">Valor unitário</string>
+    <string name="item_total_price_label">Valor total</string>
+    <string name="manual_item_invalid_error">Preencha nome, quantidade e valor corretamente</string>
+    <string name="manual_item_duplicate_error">Este produto já está na lista. Edite o item existente.</string>
+    <string name="confirm_new_product_title">Criar novo produto?</string>
+    <string name="confirm_new_product_message">Nenhum produto chamado \"%1$s\" foi encontrado. Deseja cadastrá-lo?</string>
+
+    <!-- Establishment linking -->
+    <string name="link_establishment_button">Vincular a um estabelecimento com CNPJ</string>
+    <string name="link_establishment_picker_title">Selecionar estabelecimento</string>
+    <string name="link_establishment_none_available">Nenhum estabelecimento com CNPJ cadastrado</string>
+    <string name="link_establishment_confirm_title">Vincular estabelecimento</string>
+    <string name="link_establishment_confirm_message">Essa ação não pode ser desfeita. Todas as compras deste estabelecimento passarão a pertencer ao estabelecimento selecionado, e este registro deixará de existir separadamente. Deseja continuar?</string>
+    <string name="add_establishment_content_description">Adicionar estabelecimento</string>
+    <string name="add_establishment_dialog_title">Novo estabelecimento</string>
+    <string name="cnpj_optional_label">CNPJ (opcional)</string>
+    <string name="establishment_address_label">Endereço (opcional)</string>
+    <string name="establishment_name_required_error">Informe o nome do estabelecimento</string>
+
+    <!-- Product EAN / apelido / merge -->
+    <string name="ean_field_label">Código de barras: %1$s</string>
+    <string name="ean_not_informed">Não informado</string>
+    <string name="edit_ean_content_description">Editar código de barras</string>
+    <string name="ean_dialog_title">Código de barras (EAN)</string>
+    <string name="ean_label">Código de barras</string>
+    <string name="scan_barcode_content_description">Escanear código de barras</string>
+    <string name="no_apelido_informed">Não informado</string>
+    <string name="edit_produto_apelido_content_description">Editar apelido do produto</string>
+    <string name="edit_produto_apelido_title">Apelido do produto</string>
+    <string name="merge_product_button">Vincular a outro produto</string>
+    <string name="merge_product_picker_title">Selecionar produto de destino</string>
+    <string name="merge_product_none_available">Nenhum outro produto cadastrado</string>
+    <string name="merge_product_confirm_title">Vincular produto</string>
+    <string name="merge_product_confirm_message">Essa ação não pode ser desfeita. Todo o histórico de compras deste produto passará a pertencer ao produto selecionado, e este registro deixará de existir separadamente. Deseja continuar?</string>
+
+    <!-- Renda -->
+    <string name="renda_tab_label">Renda</string>
+    <string name="add_renda_content_description">Adicionar lançamento de renda</string>
+    <string name="renda_empty">Nenhum lançamento de renda neste período</string>
+    <string name="add_renda_title">Novo lançamento</string>
+    <string name="edit_renda_title">Editar lançamento</string>
+    <string name="renda_descricao_label">Descrição</string>
+    <string name="renda_valor_label">Valor</string>
+    <string name="renda_fonte_label">Fonte</string>
+    <string name="renda_recorrente_label">Recorrente</string>
+    <string name="renda_recorrente_content_description">Lançamento recorrente</string>
+    <string name="renda_invalid_error">Preencha descrição, valor, categoria e fonte corretamente</string>
+    <string name="delete_renda_title">Excluir lançamento</string>
+    <string name="delete_renda_confirm_message">Essa ação não pode ser desfeita. Deseja realmente excluir este lançamento?</string>
+    <string name="delete_renda_recorrente_confirm_message">Essa ação não pode ser desfeita. Como este lançamento é recorrente, esta e todas as ocorrências futuras já geradas serão excluídas, e a série deixará de se repetir. Deseja continuar?</string>
+
+    <!-- Fontes de renda -->
+    <string name="fontes_button">Fontes</string>
+    <string name="fontes_empty">Nenhuma fonte cadastrada</string>
+    <string name="add_fonte_content_description">Adicionar fonte</string>
+    <string name="add_fonte_dialog_title">Nova fonte</string>
+    <string name="fonte_name_required_error">Informe o nome da fonte</string>
+    <string name="fonte_detail_title">Detalhes da Fonte</string>
+    <string name="fonte_not_found">Fonte não encontrada</string>
+    <string name="fonte_lancamentos_empty">Nenhum lançamento neste período</string>
+
+    <!-- Categorias de Renda -->
+    <string name="renda_categorias_button">Categorias de Renda</string>
+    <string name="renda_categoria_em_uso_error">Categoria em uso por algum lançamento de renda — não pode ser excluída</string>
+    <string name="categoria_produto_em_uso_error">Categoria em uso por algum produto, compra ou estabelecimento — não pode ser excluída</string>
+
+    <!-- Tipo de compra (Despesas Fixas/Parceladas) -->
+    <string name="tipo_filtro_todos">Todos</string>
+    <string name="tipo_filtro_variaveis">Variáveis</string>
+    <string name="tipo_filtro_fixas">Fixas</string>
+    <string name="tipo_filtro_parceladas">Parceladas</string>
+    <string name="tipo_filtro_rapidas">Rápidas</string>
+    <string name="tipo_compra_variavel">Variável</string>
+    <string name="tipo_compra_fixa">Fixa</string>
+    <string name="tipo_compra_parcelada">Parcelada</string>
+    <string name="tipo_compra_rapida">Rápida</string>
+    <string name="compra_fixa_nome_label">Nome</string>
+    <string name="compra_fixa_valor_label">Valor</string>
+    <string name="compra_parcelada_total_label">Total de parcelas</string>
+    <string name="compra_parcelada_ja_pagas_label">Parcelas já pagas</string>
+    <string name="parcelas_section_title">Parcelas</string>
+    <string name="parcela_numero_label">Parcela %1$d/%2$d</string>
+    <string name="parcela_numero_atual_label">Parcela %1$d/%2$d (atual)</string>
+    <string name="delete_compra_recorrente_confirm_message">Essa ação não pode ser desfeita. Esta e todas as ocorrências futuras já geradas serão excluídas, e a série deixará de se repetir. Deseja continuar?</string>
+
+    <!-- Compras Parceladas -->
+    <string name="compras_parceladas_title">Compras Parceladas</string>
+    <string name="compras_parceladas_valor_mensal_label">Valor mensal comprometido</string>
+    <string name="compras_parceladas_empty">Nenhuma compra parcelada cadastrada</string>
+    <string name="compras_parceladas_mostrar_concluidas">Mostrar concluídas</string>
+    <string name="compras_parceladas_ocultar_concluidas">Ocultar concluídas</string>
+    <string name="compras_parceladas_progresso_label">%1$d/%2$d</string>
+
+    <!-- Balanço -->
+    <string name="balanco_title">Balanço</string>
+    <string name="balanco_saldo_title">Saldo</string>
+    <string name="balanco_saldo_composicao_label">Renda %1$s − Despesas %2$s</string>
+    <string name="balanco_legenda_renda">Renda</string>
+    <string name="balanco_legenda_despesas">Despesas</string>
+    <string name="balanco_legenda_saldo">Saldo</string>
+    <string name="balanco_renda_label">Renda: %1$s</string>
+    <string name="balanco_despesas_label">Despesas: %1$s</string>
+    <string name="balanco_saldo_label">Saldo: %1$s</string>
+
+    <!-- A Receber -->
+    <string name="arecebimento_title">A Receber</string>
+    <string name="add_arecebimento_content_description">Adicionar a receber</string>
+    <string name="arecebimento_empty">Nenhum valor a receber cadastrado</string>
+    <string name="add_arecebimento_title">Novo a receber</string>
+    <string name="edit_arecebimento_title">Editar a receber</string>
+    <string name="arecebimento_invalid_error">Preencha descrição, valor, categoria e fonte corretamente</string>
+    <string name="arecebimento_data_prevista_label">Previsto para: %1$s</string>
+    <string name="arecebimento_pago_label">Pago</string>
+    <string name="arecebimento_pago_em_label">Pago em %1$s</string>
+    <string name="arecebimento_atrasado_desde_label">Atrasado desde %1$s</string>
+    <string name="arecebimento_marcar_pago_button">Marcar como pago</string>
+    <string name="arecebimento_pergunta_mes_title">Marcar como pago</string>
+    <string name="arecebimento_pergunta_mes_message">O pagamento está caindo num mês diferente do previsto. Considerar como renda de qual mês?</string>
+    <string name="arecebimento_pergunta_mes_atual_option">Mês atual (data do pagamento)</string>
+    <string name="arecebimento_pergunta_mes_previsto_option">Mês previsto originalmente</string>
+    <string name="delete_arecebimento_title">Excluir a receber</string>
+    <string name="delete_arecebimento_confirm_message">Essa ação não pode ser desfeita. Deseja realmente excluir este a receber?</string>
+    <string name="delete_arecebimento_recorrente_confirm_message">Essa ação não pode ser desfeita. Este e todas as ocorrências futuras já geradas serão excluídas, e a série deixará de se repetir. Deseja continuar?</string>
+    <string name="delete_arecebimento_pago_confirm_message">Essa ação não pode ser desfeita. Como este item já foi pago, a renda gerada a partir dele também será excluída. Deseja continuar?</string>
+    <string name="tipo_arecebimento_pontual">Pontual</string>
+    <string name="tipo_arecebimento_fixa">Fixa</string>
+    <string name="tipo_arecebimento_parcelada">Parcelada</string>
+    <string name="arecebimento_alertas_content_description">Alertas de atraso</string>
+    <string name="arecebimento_alertas_title">Recebimentos em atraso</string>
+    <string name="arecebimento_alertas_empty">Nenhum recebimento em atraso</string>
+
+    <!-- Configurações (organização em seções) -->
+    <string name="settings_section_despesas">Despesas</string>
+    <string name="settings_section_renda">Renda</string>
+    <string name="settings_section_dados">Dados</string>
+
+    <!-- Categoria por Estabelecimento -->
+    <string name="category_spending_modo_por_compra">Por Compra</string>
+    <string name="category_spending_modo_por_produto">Por Produto</string>
+    <string name="categoria_conflict_title">Categorias diferentes</string>
+    <string name="categoria_conflict_message">Os dois estabelecimentos têm categorias diferentes (\"%1$s\" e \"%2$s\"). Qual categoria deve prevalecer?</string>
+
+    <!-- Divisão de Conta -->
+    <string name="dividir_conta_label">Dividir conta</string>
+    <string name="dividir_igualmente_label">Dividir igualmente</string>
+    <string name="divisao_participante_label">Adicionar participante</string>
+    <string name="divisao_add_participante_content_description">Adicionar participante</string>
+    <string name="divisao_sua_parte_label">Sua parte: %1$s</string>
+    <string name="divisao_participantes_title">Divisão da conta</string>
+    <string name="divisao_participante_duplicado_error">Esse participante já foi adicionado</string>
 </resources>

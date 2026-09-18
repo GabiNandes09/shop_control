@@ -3,16 +3,21 @@ package com.rogue.shopcontrol.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rogue.shopcontrol.data.local.entity.CompraCompleta
+import com.rogue.shopcontrol.data.local.entity.TipoCompra
+import com.rogue.shopcontrol.domain.model.DateRange
 import com.rogue.shopcontrol.domain.usecase.GetComprasUseCase
+import com.rogue.shopcontrol.domain.usecase.GetHomeDateRangeUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.RecordsState
+import com.rogue.shopcontrol.presentation.viewmodel.states.TipoFiltroCompra
 import com.rogue.shopcontrol.utils.parseDataCompra
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.YearMonth
 
 class RecordsViewModel(
-    getCompras: GetComprasUseCase
+    getCompras: GetComprasUseCase,
+    getHomeDateRange: GetHomeDateRangeUseCase
 ) : ViewModel() {
 
 
@@ -31,11 +36,20 @@ class RecordsViewModel(
 
         viewModelScope.launch {
 
+            _state.value =
+                _state.value.copy(dateRange = getHomeDateRange().first())
+
+            aplicarFiltro()
+
+        }
+
+        viewModelScope.launch {
+
             getCompras().collect { compras ->
 
                 comprasOriginais = compras
 
-                aplicarFiltroMes()
+                aplicarFiltro()
 
             }
 
@@ -44,41 +58,49 @@ class RecordsViewModel(
     }
 
 
-    fun onPreviousMonth() {
+    fun onDateRangeChanged(dateRange: DateRange) {
 
         _state.value =
-            _state.value.copy(
-                selectedMonth = _state.value.selectedMonth.minusMonths(1)
-            )
+            _state.value.copy(dateRange = dateRange)
 
-        aplicarFiltroMes()
+        aplicarFiltro()
 
     }
 
 
-    fun onNextMonth() {
+    fun onTipoFiltroChanged(tipoFiltro: TipoFiltroCompra) {
 
         _state.value =
-            _state.value.copy(
-                selectedMonth = _state.value.selectedMonth.plusMonths(1)
-            )
+            _state.value.copy(tipoFiltro = tipoFiltro)
 
-        aplicarFiltroMes()
+        aplicarFiltro()
 
     }
 
 
-    private fun aplicarFiltroMes() {
+    private fun aplicarFiltro() {
 
-        val mes = _state.value.selectedMonth
+        val range = _state.value.dateRange
+        val tipoFiltro = _state.value.tipoFiltro
 
         val filtradas =
             comprasOriginais.filter { compraCompleta ->
 
                 val data =
-                    parseDataCompra(compraCompleta.compra.dataCompra)
+                    parseDataCompra(compraCompleta.compra.dataParaFiltro)
 
-                data != null && YearMonth.from(data) == mes
+                val passaData = data != null && data in range
+
+                val passaTipo =
+                    when (tipoFiltro) {
+                        TipoFiltroCompra.TODOS -> true
+                        TipoFiltroCompra.VARIAVEIS -> compraCompleta.compra.tipo == TipoCompra.VARIAVEL
+                        TipoFiltroCompra.FIXAS -> compraCompleta.compra.tipo == TipoCompra.FIXA
+                        TipoFiltroCompra.PARCELADAS -> compraCompleta.compra.tipo == TipoCompra.PARCELADA
+                        TipoFiltroCompra.RAPIDAS -> compraCompleta.compra.tipo == TipoCompra.RAPIDA
+                    }
+
+                passaData && passaTipo
 
             }
 

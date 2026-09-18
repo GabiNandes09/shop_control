@@ -4,16 +4,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.presentation.components.CategoryListItem
+import com.rogue.shopcontrol.presentation.components.CategoryPickerDialog
 import com.rogue.shopcontrol.presentation.components.FilterOverlay
 import com.rogue.shopcontrol.presentation.components.FilterToggleChip
+import com.rogue.shopcontrol.presentation.components.LinkProdutosToCategoriaDialog
 import com.rogue.shopcontrol.presentation.components.ScreenHeader
 import com.rogue.shopcontrol.presentation.components.TextInputDialog
 import com.rogue.shopcontrol.presentation.viewmodel.CategoryManagementViewModel
@@ -47,8 +53,27 @@ fun CategoryManagementScreen(
         mutableStateOf(false)
     }
 
+    Scaffold(
+        floatingActionButton = {
+
+            FloatingActionButton(
+                onClick = viewModel::onShowAddDialog
+            ) {
+
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.add_category_content_description)
+                )
+
+            }
+
+        }
+    ) { innerPadding ->
+
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
     ) {
 
         ScreenHeader(
@@ -71,48 +96,14 @@ fun CategoryManagementScreen(
 
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
+        state.errorRes?.let { errorRes ->
 
-            Row(
-                verticalAlignment = Alignment.Top
-            ) {
-
-                OutlinedTextField(
-                    value = state.newCategoryName,
-                    onValueChange = viewModel::onNewCategoryNameChanged,
-                    label = {
-                        Text(stringResource(R.string.new_category_label))
-                    },
-                    singleLine = true,
-                    isError = state.errorRes != null,
-                    modifier = Modifier.weight(1f)
-                )
-
-                Button(
-                    onClick = viewModel::onAddCategory,
-                    modifier = Modifier.padding(start = 8.dp)
-                ) {
-
-                    Text(stringResource(R.string.add))
-
-                }
-
-            }
-
-            state.errorRes?.let { errorRes ->
-
-                Text(
-                    text = stringResource(errorRes),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-
-            }
+            Text(
+                text = stringResource(errorRes),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(16.dp)
+            )
 
         }
 
@@ -172,12 +163,19 @@ fun CategoryManagementScreen(
                         ) { categoria ->
 
                             CategoryListItem(
-                                categoria = categoria,
+                                nome = categoria.nome,
+                                grupoNome = state.grupoNomeDe(categoria),
                                 onEditClick = {
                                     viewModel.onEditClick(categoria)
                                 },
                                 onDeleteClick = {
                                     viewModel.onDeleteCategory(categoria.id)
+                                },
+                                onGrupoClick = {
+                                    viewModel.onShowGrupoPicker(categoria)
+                                },
+                                onLinkProdutosClick = {
+                                    viewModel.onShowLinkProdutosDialog(categoria)
                                 }
                             )
 
@@ -210,6 +208,21 @@ fun CategoryManagementScreen(
 
     }
 
+    }
+
+    if (state.showAddDialog) {
+
+        TextInputDialog(
+            title = stringResource(R.string.add_category_dialog_title),
+            label = stringResource(R.string.category_name_label),
+            value = state.newCategoryName,
+            onValueChange = viewModel::onNewCategoryNameChanged,
+            onSave = viewModel::onAddCategory,
+            onDismiss = viewModel::onDismissAddDialog
+        )
+
+    }
+
     state.editingCategoria?.let {
 
         TextInputDialog(
@@ -220,6 +233,39 @@ fun CategoryManagementScreen(
             onSave = viewModel::onSaveEdit,
             onDismiss = viewModel::onEditDismiss
         )
+
+    }
+
+    if (state.showGrupoPicker) {
+
+        val categoriaAtual = state.categoriaParaGrupo
+
+        CategoryPickerDialog(
+            categorias = state.todasCategorias.filter { it.id != categoriaAtual?.id },
+            onCategorySelected = viewModel::onGrupoSelected,
+            onDismiss = viewModel::onDismissGrupoPicker
+        )
+
+    }
+
+    if (state.showLinkProdutosDialog) {
+
+        val categoria = state.categoriaParaLink
+
+        if (categoria != null) {
+
+            LinkProdutosToCategoriaDialog(
+                titulo = stringResource(R.string.link_produtos_title),
+                produtos = state.todosProdutos,
+                selecionados = state.produtosSelecionados,
+                searchQuery = state.produtoSearchQuery,
+                onSearchQueryChanged = viewModel::onProdutoSearchChanged,
+                onToggleProduto = viewModel::onToggleProdutoSelecionado,
+                onSave = viewModel::onSaveLinkProdutos,
+                onDismiss = viewModel::onDismissLinkProdutosDialog
+            )
+
+        }
 
     }
 

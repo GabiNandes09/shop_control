@@ -6,7 +6,7 @@ class DeleteCategoriaUseCase(
     private val repository: CategoriaRepository
 ) {
 
-    suspend operator fun invoke(categoriaId: Long) =
+    suspend operator fun invoke(categoriaId: Long): Boolean =
         repository.deleteCategoria(categoriaId)
 
 }

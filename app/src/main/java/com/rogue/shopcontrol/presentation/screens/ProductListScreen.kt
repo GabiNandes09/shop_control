@@ -28,9 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.R
+import com.rogue.shopcontrol.presentation.components.DateRangeSelector
 import com.rogue.shopcontrol.presentation.components.FilterOverlay
 import com.rogue.shopcontrol.presentation.components.FilterToggleChip
-import com.rogue.shopcontrol.presentation.components.MonthSelector
 import com.rogue.shopcontrol.presentation.components.ProductGastoRow
 import com.rogue.shopcontrol.presentation.components.ScreenHeader
 import com.rogue.shopcontrol.presentation.viewmodel.ProductListViewModel
@@ -140,10 +140,9 @@ fun ProductListScreen(
                 onDismiss = { filtersExpanded = false }
             ) {
 
-                MonthSelector(
-                    selectedMonth = state.selectedMonth,
-                    onPreviousMonth = viewModel::onPreviousMonth,
-                    onNextMonth = viewModel::onNextMonth
+                DateRangeSelector(
+                    dateRange = state.dateRange,
+                    onDateRangeChanged = viewModel::onDateRangeChanged
                 )
 
                 OutlinedTextField(

@@ -31,7 +31,7 @@ fun ProductHistoryRow(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            EstablishmentName(
+            EntityName(
                 nome = historico.nomeEstabelecimento,
                 apelido = historico.apelidoEstabelecimento,
                 style = MaterialTheme.typography.titleSmall

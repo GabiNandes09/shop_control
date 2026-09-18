@@ -32,6 +32,8 @@ fun ProductSummaryCard(
     highestPrice: Double?,
     lowestPrice: Double?,
     onAddCategoryClick: () -> Unit,
+    onEditEanClick: () -> Unit,
+    onEditApelidoClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -54,8 +56,9 @@ fun ProductSummaryCard(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            Text(
-                text = produto.nome,
+            EntityName(
+                nome = produto.nome,
+                apelido = produto.apelido,
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -85,6 +88,65 @@ fun ProductSummaryCard(
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(R.string.add_category_content_description)
+                    )
+
+                }
+
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = stringResource(
+                        R.string.ean_field_label,
+                        produto.codigoBarras ?: stringResource(R.string.ean_not_informed)
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = onEditEanClick
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.edit_ean_content_description)
+                    )
+
+                }
+
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = stringResource(
+                        R.string.apelido_label
+                    ) + ": " + (produto.apelido?.takeIf { it.isNotBlank() } ?: stringResource(R.string.no_apelido_informed)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = onEditApelidoClick
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.edit_produto_apelido_content_description)
                     )
 
                 }

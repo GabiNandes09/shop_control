@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.CompraCompleta
+import com.rogue.shopcontrol.data.local.entity.TipoCompra
 import com.rogue.shopcontrol.utils.formatCurrency
 
 @Composable
@@ -35,11 +36,23 @@ fun PurchaseListItem(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            EstablishmentName(
+            EntityName(
                 nome = compra.estabelecimento.nome,
                 apelido = compra.estabelecimento.apelido,
                 style = MaterialTheme.typography.titleMedium
             )
+
+            if (compra.compra.tipo != TipoCompra.VARIAVEL) {
+
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = compra.compra.nome ?: "",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+
+            }
 
             Spacer(Modifier.height(4.dp))
 

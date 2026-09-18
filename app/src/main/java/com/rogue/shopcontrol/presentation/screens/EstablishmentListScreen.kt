@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rogue.shopcontrol.R
+import com.rogue.shopcontrol.presentation.components.AddEstablishmentDialog
+import com.rogue.shopcontrol.presentation.components.CategoryPickerDialog
+import com.rogue.shopcontrol.presentation.components.DateRangeSelector
 import com.rogue.shopcontrol.presentation.components.EstablishmentGastoRow
 import com.rogue.shopcontrol.presentation.components.FilterOverlay
 import com.rogue.shopcontrol.presentation.components.FilterToggleChip
@@ -43,8 +51,27 @@ fun EstablishmentListScreen(
         mutableStateOf(false)
     }
 
+    Scaffold(
+        floatingActionButton = {
+
+            FloatingActionButton(
+                onClick = viewModel::onShowAddDialog
+            ) {
+
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.add_establishment_content_description)
+                )
+
+            }
+
+        }
+    ) { innerPadding ->
+
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
     ) {
 
         ScreenHeader(
@@ -132,6 +159,11 @@ fun EstablishmentListScreen(
                 onDismiss = { filtersExpanded = false }
             ) {
 
+                DateRangeSelector(
+                    dateRange = state.dateRange,
+                    onDateRangeChanged = viewModel::onDateRangeChanged
+                )
+
                 OutlinedTextField(
                     value = state.nameFilter,
                     onValueChange = viewModel::onNameFilterChanged,
@@ -145,6 +177,40 @@ fun EstablishmentListScreen(
             }
 
         }
+
+    }
+
+    }
+
+    if (state.showAddDialog) {
+
+        AddEstablishmentDialog(
+            nome = state.newNome,
+            onNomeChanged = viewModel::onNewNomeChanged,
+            cnpj = state.newCnpj,
+            onCnpjChanged = viewModel::onNewCnpjChanged,
+            endereco = state.newEndereco,
+            onEnderecoChanged = viewModel::onNewEnderecoChanged,
+            apelido = state.newApelido,
+            onApelidoChanged = viewModel::onNewApelidoChanged,
+            categorias = state.categorias,
+            categoriaSelecionadaId = state.newCategoriaId,
+            onShowCategoriaPicker = viewModel::onShowNewCategoryPicker,
+            errorRes = state.addErrorRes,
+            onSave = viewModel::onSaveNewEstabelecimento,
+            onDismiss = viewModel::onDismissAddDialog
+        )
+
+    }
+
+    if (state.showNewCategoryPicker) {
+
+        CategoryPickerDialog(
+            categorias = state.categorias,
+            onCategorySelected = viewModel::onNewCategoriaSelecionada,
+            onDismiss = viewModel::onDismissNewCategoryPicker,
+            onCreateCategory = viewModel::onCreateNewCategoria
+        )
 
     }
 

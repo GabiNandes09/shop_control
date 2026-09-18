@@ -3,7 +3,7 @@ package com.rogue.shopcontrol.data.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.RoomWarnings
+import androidx.room.Transaction
 import com.rogue.shopcontrol.data.local.entity.ProdutoCompraHistorico
 import com.rogue.shopcontrol.data.local.entity.ProdutoEntity
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
@@ -30,25 +30,14 @@ interface ProdutoDao {
     ): ProdutoEntity?
 
 
-    @SuppressWarnings(RoomWarnings.QUERY_MISMATCH)
-    @Query("""
-        SELECT p.id AS id, p.nome AS nome,
-               SUM(i.valorTotal) AS valorTotalGasto,
-               SUM(i.quantidade) AS quantidadeTotal
-        FROM produtos p
-        INNER JOIN itens_compra i ON i.produtoId = p.id
-        GROUP BY p.id
-        ORDER BY valorTotalGasto DESC
-    """)
-    fun getProdutosGasto(): Flow<List<ProdutoGasto>>
-
-
     @Query("""
         SELECT p.id AS id, p.nome AS nome,
                SUM(i.valorTotal) AS valorTotalGasto,
                SUM(i.quantidade) AS quantidadeTotal,
                c.id AS categoriaId,
-               c.nome AS categoriaNome
+               c.nome AS categoriaNome,
+               p.apelido AS apelido,
+               p.codigoBarras AS codigoBarras
         FROM produtos p
         INNER JOIN itens_compra i ON i.produtoId = p.id
         LEFT JOIN categorias c ON c.id = p.categoriaId
@@ -69,14 +58,15 @@ interface ProdutoDao {
         INNER JOIN compras c ON c.id = i.compraId
         INNER JOIN estabelecimentos e ON e.id = c.estabelecimentoId
         WHERE i.produtoId = :produtoId
-        ORDER BY c.dataCompra DESC
+        ORDER BY substr(c.dataCompra,7,4) || substr(c.dataCompra,4,2) || substr(c.dataCompra,1,2) || substr(c.dataCompra,12,8) DESC, c.id DESC
     """)
     fun getHistoricoProduto(produtoId: Long): Flow<List<ProdutoCompraHistorico>>
 
 
     @Query("""
-        SELECT p.id AS produtoId, p.nome AS nomeProduto,
+        SELECT p.id AS produtoId, p.nome AS nomeProduto, p.apelido AS apelidoProduto,
                cat.id AS categoriaId, cat.nome AS categoriaNome,
+               p.codigoBarras AS codigoBarras,
                c.dataCompra AS dataCompra,
                i.quantidade AS quantidade,
                i.valorTotal AS valorTotal
@@ -104,5 +94,68 @@ interface ProdutoDao {
         produtoId: Long,
         categoriaId: Long
     )
+
+
+    @Query("""
+        UPDATE produtos
+        SET categoriaId = :categoriaId
+        WHERE id IN (:produtoIds)
+    """)
+    suspend fun updateCategoriaForIds(
+        produtoIds: List<Long>,
+        categoriaId: Long
+    )
+
+
+    @Query("""
+        UPDATE produtos
+        SET codigoBarras = :codigoBarras
+        WHERE id = :produtoId
+    """)
+    suspend fun updateCodigoBarras(
+        produtoId: Long,
+        codigoBarras: String?
+    )
+
+
+    @Query("""
+        UPDATE produtos
+        SET apelido = :apelido
+        WHERE id = :produtoId
+    """)
+    suspend fun updateApelido(
+        produtoId: Long,
+        apelido: String?
+    )
+
+
+    @Query("""
+        UPDATE itens_compra
+        SET produtoId = :destinoId
+        WHERE produtoId = :origemId
+    """)
+    suspend fun reassignItens(
+        origemId: Long,
+        destinoId: Long
+    )
+
+
+    @Query("""
+        DELETE FROM produtos
+        WHERE id = :produtoId
+    """)
+    suspend fun delete(
+        produtoId: Long
+    )
+
+
+    @Transaction
+    suspend fun mergeProdutos(
+        origemId: Long,
+        destinoId: Long
+    ) {
+        reassignItens(origemId, destinoId)
+        delete(origemId)
+    }
 
 }

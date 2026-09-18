@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rogue.shopcontrol.R
 import com.rogue.shopcontrol.data.local.entity.CompraCompleta
+import com.rogue.shopcontrol.data.local.entity.OrigemCompra
 import com.rogue.shopcontrol.utils.formatCurrency
 
 @Composable
@@ -47,11 +49,31 @@ fun PurchaseSummaryCard(
 
             Spacer(Modifier.height(8.dp))
 
-            EstablishmentName(
+            EntityName(
                 nome = compra.estabelecimento.nome,
                 apelido = compra.estabelecimento.apelido,
                 style = MaterialTheme.typography.titleLarge
             )
+
+            if (compra.compra.origem == OrigemCompra.MANUAL) {
+
+                Spacer(Modifier.height(8.dp))
+
+                Surface(
+                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    shape = MaterialTheme.shapes.small
+                ) {
+
+                    Text(
+                        text = stringResource(R.string.manual_purchase_badge),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+
+                }
+
+            }
 
             if (compra.estabelecimento.cnpj.isNotBlank()) {
 

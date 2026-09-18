@@ -1,6 +1,7 @@
 package com.rogue.shopcontrol.presentation.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import com.rogue.shopcontrol.R
 fun ScreenHeader(
     title: String = stringResource(R.string.records_header_title),
     onBackClick: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -59,8 +61,11 @@ fun ScreenHeader(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.weight(1f)
             )
+
+            actions()
 
         }
 

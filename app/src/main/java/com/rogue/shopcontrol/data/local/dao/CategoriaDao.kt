@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.rogue.shopcontrol.data.local.entity.CategoriaEntity
-import com.rogue.shopcontrol.data.local.entity.CategoriaGasto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -35,6 +34,16 @@ interface CategoriaDao {
 
 
     @Query("""
+        SELECT * FROM categorias
+        WHERE id = :categoriaId
+        LIMIT 1
+    """)
+    suspend fun findById(
+        categoriaId: Long
+    ): CategoriaEntity?
+
+
+    @Query("""
         DELETE FROM categorias
         WHERE id = :categoriaId
     """)
@@ -55,13 +64,24 @@ interface CategoriaDao {
 
 
     @Query("""
-        SELECT c.nome AS nome, SUM(i.valorTotal) AS valorTotalGasto
-        FROM itens_compra i
-        INNER JOIN produtos p ON p.id = i.produtoId
-        LEFT JOIN categorias c ON c.id = p.categoriaId
-        GROUP BY c.id
-        ORDER BY valorTotalGasto DESC
+        UPDATE categorias
+        SET grupoId = :grupoId
+        WHERE id = :categoriaId
     """)
-    fun getCategoriasGasto(): Flow<List<CategoriaGasto>>
+    suspend fun updateGrupo(
+        categoriaId: Long,
+        grupoId: Long?
+    )
+
+
+    @Query("""
+        SELECT
+            (SELECT COUNT(*) FROM produtos WHERE categoriaId = :categoriaId) +
+            (SELECT COUNT(*) FROM compras WHERE categoriaId = :categoriaId) +
+            (SELECT COUNT(*) FROM estabelecimentos WHERE categoriaId = :categoriaId)
+    """)
+    suspend fun countUsage(
+        categoriaId: Long
+    ): Int
 
 }

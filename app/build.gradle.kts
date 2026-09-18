@@ -121,4 +121,7 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.converter.scalars)
 
+    // DataStore
+    implementation(libs.datastore.preferences)
+
 }

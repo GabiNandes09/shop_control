@@ -37,7 +37,8 @@ class ScannerViewModel(
 
         _state.value =
             _state.value.copy(
-                isScanning = false
+                isScanning = false,
+                isLoading = true
             )
 
         viewModelScope.launch {
@@ -67,6 +68,26 @@ class ScannerViewModel(
 
                 val nfce =
                     parser.parse(html)
+
+                val notaInvalida =
+                    nfce.chaveAcesso.isBlank() &&
+                        nfce.estabelecimento.nome.isBlank() &&
+                        nfce.produtos.isEmpty()
+
+                if (notaInvalida) {
+
+                    Log.e(
+                        "NFC_E",
+                        "Nota não encontrada ou QR Code inválido (página sem dados de nota)"
+                    )
+
+                    _state.value = ScannerState(
+                        isScanning = false,
+                        errorRes = R.string.scanner_error_invalid_nota
+                    )
+
+                    return@launch
+                }
 
                 val compraId =
                     savePurchase(

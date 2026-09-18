@@ -1,5 +1,6 @@
 package com.rogue.shopcontrol.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,9 @@ import com.rogue.shopcontrol.utils.formatCurrency
 fun EstablishmentSummaryCard(
     estabelecimento: EstabelecimentoEntity,
     totalGasto: Double,
+    categoriaNome: String?,
     onEditClick: () -> Unit,
+    onEditCategoriaClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -51,7 +54,7 @@ fun EstablishmentSummaryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                EstablishmentName(
+                EntityName(
                     nome = estabelecimento.nome,
                     apelido = estabelecimento.apelido,
                     style = MaterialTheme.typography.titleLarge,
@@ -88,6 +91,23 @@ fun EstablishmentSummaryCard(
 
                 Text(
                     text = estabelecimento.endereco,
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(onClick = onEditCategoriaClick)
+            ) {
+
+                Text(
+                    text = stringResource(
+                        R.string.category_label,
+                        categoriaNome ?: stringResource(R.string.no_category)
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
 

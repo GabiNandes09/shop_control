@@ -6,6 +6,8 @@ sealed class Routes(
 
     data object Home : Routes("home")
 
+    data object Analise : Routes("analise")
+
     data object Scanner : Routes("scanner")
 
     data object Records : Routes("records")
@@ -42,6 +44,37 @@ sealed class Routes(
 
         fun createRoute(estabelecimentoId: Long) =
             "establishment_detail/$estabelecimentoId"
+
+    }
+
+    data object ManualPurchaseEntry : Routes("manual_purchase_entry?compraId={compraId}") {
+
+        fun createRoute(compraId: Long = 0L) =
+            "manual_purchase_entry?compraId=$compraId"
+
+    }
+
+    data object Renda : Routes("renda")
+
+    data object Fontes : Routes("fontes")
+
+    data object RendaCategoriaManagement : Routes("renda_categoria_management")
+
+    data object FonteDetail : Routes("fonte_detail/{fonteId}") {
+
+        fun createRoute(fonteId: Long) =
+            "fonte_detail/$fonteId"
+
+    }
+
+    data object ComprasParceladas : Routes("compras_parceladas")
+
+    data object Balanco : Routes("balanco")
+
+    data object ARecebimento : Routes("arecebimento?highlightId={highlightId}") {
+
+        fun createRoute(highlightId: Long = 0L) =
+            "arecebimento?highlightId=$highlightId"
 
     }
 }

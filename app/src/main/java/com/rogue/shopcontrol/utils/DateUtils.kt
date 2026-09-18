@@ -1,10 +1,15 @@
 package com.rogue.shopcontrol.utils
 
+import com.rogue.shopcontrol.domain.model.DateRange
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.Locale
+
+private val DATE_RANGE_DISPLAY_FORMATTER: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 private val DATA_COMPRA_FORMATTER: DateTimeFormatter =
     DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
@@ -31,17 +36,22 @@ fun parseDataCompra(dataCompra: String?): LocalDate? {
 }
 
 
-fun formatMonthYear(yearMonth: YearMonth): String {
+fun formatDateRange(dateRange: DateRange): String =
+    "${dateRange.start.format(DATE_RANGE_DISPLAY_FORMATTER)} - ${dateRange.end.format(DATE_RANGE_DISPLAY_FORMATTER)}"
 
-    val formatter =
-        DateTimeFormatter.ofPattern(
-            "MMMM yyyy",
-            Locale.getDefault()
-        )
 
-    return formatter.format(yearMonth)
-        .replaceFirstChar {
-            it.titlecase(Locale.getDefault())
-        }
+fun formatDataCompra(data: LocalDate, hora: LocalTime = LocalTime.NOON): String =
+    LocalDateTime.of(data, hora).format(DATA_COMPRA_FORMATTER)
+
+
+fun LocalDate.plusMonthsClamped(months: Long): LocalDate {
+
+    val mesDestino =
+        YearMonth.from(this).plusMonths(months)
+
+    val dia =
+        minOf(dayOfMonth, mesDestino.lengthOfMonth())
+
+    return mesDestino.atDay(dia)
 
 }

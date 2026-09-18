@@ -1,5 +1,6 @@
 package com.rogue.shopcontrol.utils
 
+import com.rogue.shopcontrol.domain.model.BalancoMensal
 import com.rogue.shopcontrol.domain.model.MonthlySpending
 import com.rogue.shopcontrol.presentation.model.ChartEntry
 import java.time.format.DateTimeFormatter
@@ -14,3 +15,6 @@ fun MonthlySpending.toChartEntry(): ChartEntry =
         value = total,
         displayValue = formatCurrency(total)
     )
+
+fun BalancoMensal.mesLabel(): String =
+    MES_FORMATTER.format(yearMonth)

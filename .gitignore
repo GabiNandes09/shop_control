@@ -14,3 +14,6 @@
 .cxx
 local.properties
 *.apk
+import_financas_2026.json
+import_nota_rondon.json
+.kotlin/

@@ -4,19 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rogue.shopcontrol.data.local.entity.ProdutoGasto
 import com.rogue.shopcontrol.data.local.entity.ProdutoItemComData
+import com.rogue.shopcontrol.domain.model.DateRange
 import com.rogue.shopcontrol.domain.usecase.GetCategoriasUseCase
+import com.rogue.shopcontrol.domain.usecase.GetHomeDateRangeUseCase
 import com.rogue.shopcontrol.domain.usecase.GetProdutoItensComDataUseCase
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProdutoSortOption
 import com.rogue.shopcontrol.presentation.viewmodel.states.ProductListState
 import com.rogue.shopcontrol.utils.parseDataCompra
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.YearMonth
 
 class ProductListViewModel(
     getProdutoItensComData: GetProdutoItensComDataUseCase,
-    getCategorias: GetCategoriasUseCase
+    getCategorias: GetCategoriasUseCase,
+    getHomeDateRange: GetHomeDateRangeUseCase
 ) : ViewModel() {
 
 
@@ -32,6 +35,15 @@ class ProductListViewModel(
 
 
     init {
+
+        viewModelScope.launch {
+
+            _state.value =
+                _state.value.copy(dateRange = getHomeDateRange().first())
+
+            aplicarFiltros()
+
+        }
 
         viewModelScope.launch {
 
@@ -97,24 +109,10 @@ class ProductListViewModel(
     }
 
 
-    fun onPreviousMonth() {
+    fun onDateRangeChanged(dateRange: DateRange) {
 
         _state.value =
-            _state.value.copy(
-                selectedMonth = _state.value.selectedMonth.minusMonths(1)
-            )
-
-        aplicarFiltros()
-
-    }
-
-
-    fun onNextMonth() {
-
-        _state.value =
-            _state.value.copy(
-                selectedMonth = _state.value.selectedMonth.plusMonths(1)
-            )
+            _state.value.copy(dateRange = dateRange)
 
         aplicarFiltros()
 
@@ -123,7 +121,7 @@ class ProductListViewModel(
 
     private fun aplicarFiltros() {
 
-        val mes = _state.value.selectedMonth
+        val range = _state.value.dateRange
         val nomeFiltro = _state.value.nameFilter
         val categoriaFiltro = _state.value.selectedCategoryId
 
@@ -134,7 +132,7 @@ class ProductListViewModel(
                     val data =
                         parseDataCompra(item.dataCompra)
 
-                    data != null && YearMonth.from(data) == mes
+                    data != null && data in range
 
                 }
                 .groupBy { it.produtoId to it.nomeProduto }
@@ -148,7 +146,9 @@ class ProductListViewModel(
                         valorTotalGasto = itens.sumOf { it.valorTotal },
                         quantidadeTotal = itens.sumOf { it.quantidade },
                         categoriaId = primeiro.categoriaId,
-                        categoriaNome = primeiro.categoriaNome
+                        categoriaNome = primeiro.categoriaNome,
+                        apelido = primeiro.apelidoProduto,
+                        codigoBarras = primeiro.codigoBarras
                     )
 
                 }
@@ -159,7 +159,11 @@ class ProductListViewModel(
                             produto.nome.contains(
                                 nomeFiltro,
                                 ignoreCase = true
-                            )
+                            ) ||
+                            produto.apelido?.contains(
+                                nomeFiltro,
+                                ignoreCase = true
+                            ) == true
 
                     val passaCategoria =
                         categoriaFiltro == null ||

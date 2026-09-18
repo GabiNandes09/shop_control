@@ -23,6 +23,7 @@ mlkitBarcode = "17.3.0"
 workManager = "2.11.2"
 navigation = "2.9.8"
 jsoup = "1.22.2"
+datastore = "1.1.1"
 
 [libraries]
 
@@ -77,6 +78,7 @@ workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workMa
 
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 

@@ -12,8 +12,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+
+val PositiveValueColor = Color(0xFF4CAF50)
+val NegativeValueColor = Color(0xFFF44336)
 
 @Composable
 fun StatCard(
@@ -21,6 +25,7 @@ fun StatCard(
     value: String,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
+    valueColor: Color? = null,
     onClick: (() -> Unit)? = null
 ) {
 
@@ -54,7 +59,8 @@ fun StatCard(
             Text(
                 text = value,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = valueColor ?: MaterialTheme.colorScheme.onSecondaryContainer
             )
 
             subtitle?.let {
